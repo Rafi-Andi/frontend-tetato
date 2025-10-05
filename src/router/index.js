@@ -1,4 +1,5 @@
 import Beranda from '@/pages/Beranda.vue'
+import DetailProduk from '@/pages/DetailProduk.vue'
 import Produk from '@/pages/Produk.vue'
 import TentangKami from '@/pages/TentangKami.vue'
 import { createRouter, createWebHistory } from 'vue-router'
@@ -16,6 +17,12 @@ const router = createRouter({
       path: '/produk',
       component: Produk,
       name: 'produk',
+      meta: {layout: 'default'}
+    },
+    {
+      path: '/detail-produk',
+      component: DetailProduk,
+      name: 'detail-produk',
       meta: {layout: 'default'}
     },
     {

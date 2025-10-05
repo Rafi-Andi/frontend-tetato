@@ -4,12 +4,12 @@ import Navbar from '@/components/Navbar.vue'
 </script>
 
 <template>
-  <Navbar />
+  <!-- <Navbar /> -->
   <main>
     <slot />
   </main>
 
-  <FooterKita />
+  <!-- <FooterKita /> -->
 </template>
 
 <style scoped></style>
