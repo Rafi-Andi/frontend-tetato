@@ -1,5 +1,6 @@
 import Beranda from '@/pages/Beranda.vue'
 import DetailProduk from '@/pages/DetailProduk.vue'
+import KeranjangBelanja from '@/pages/KeranjangBelanja.vue'
 import Produk from '@/pages/Produk.vue'
 import TentangKami from '@/pages/TentangKami.vue'
 import { createRouter, createWebHistory } from 'vue-router'
@@ -33,6 +34,12 @@ const router = createRouter({
       name: 'tentang-kami',
       meta: { layout: 'default' },
     },
+    {
+      path: '/keranjang-belanja',
+      component: KeranjangBelanja,
+      name: 'keranjang-belanja'
+      
+    }
   ],
 })
 

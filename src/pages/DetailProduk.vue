@@ -1,13 +1,15 @@
 <script setup>
 import Button from '@/fragments/Button.vue'
+import ButtonBack from '@/fragments/ButtonBack.vue'
 import { formatRupiah } from '@/lib/FormatRupiah'
+import { useKeranjangStore } from '@/stores/Keranjang'
 import { useProdukStore } from '@/stores/Produk'
 import { computed, onMounted, reactive, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
 const props = defineProps(['slug'])
 
-const {slug} = props
+const { slug } = props
 const ProdukStore = useProdukStore()
 
 const { getProduk } = ProdukStore
@@ -15,31 +17,44 @@ const { getProduk } = ProdukStore
 const data = getProduk(slug)
 
 const kuantitas = ref(1)
-const totalHarga = () => {
-  return data.harga * kuantitas.value
-}
+const totalHarga = computed(() => data.harga * kuantitas.value)
 
 const tambah = () => {
   kuantitas.value++
-  console.log(formatRupiah(totalHarga()))
+  console.log(formatRupiah(totalHarga.value))
 }
 
 const kurang = () => {
-  if(kuantitas.value > 1){
+  if (kuantitas.value > 1) {
     kuantitas.value--
   }
 }
 
+const KeranjangStore = useKeranjangStore()
 
+const { addKeranjang } = KeranjangStore
+
+const dataCheckOut = ref({})
+
+const handleCheckout = () => {
+  dataCheckOut.value = {
+    nama: data.title,
+    kategori: data.kemasan,
+    gambar: data.gambar,
+    harga: data.harga,
+    jumlah: kuantitas.value,
+    total: totalHarga.value,
+  }
+
+  addKeranjang(dataCheckOut.value)
+
+  dataCheckOut.value = {}
+}
 </script>
 
 <template>
   <main>
-    <div class="button-kembali">
-      <router-link :to="{ name: 'produk' }">
-        <Button label="< Kembali" />
-      </router-link>
-    </div>
+    <ButtonBack />
     <header>
       <h1>Detail Produk</h1>
       <p>{{ slug }}</p>
@@ -55,11 +70,15 @@ const kurang = () => {
         </p>
         <div class="button-jumlah">
           <div class="kurang" @click="kurang">-</div>
-          <div><p>{{ kuantitas }}</p></div>
+          <div>
+            <p>{{ kuantitas }}</p>
+          </div>
           <div class="tambah" @click="tambah">+</div>
         </div>
-        <h1 class="harga-total">Total: {{ formatRupiah(totalHarga()) }}</h1>
-        <Button label="Tambah ke keranjang" />
+        <h1 class="harga-total">Total: {{ formatRupiah(totalHarga) }}</h1>
+        <div @click="handleCheckout">
+          <Button label="Tambah ke keranjang" />
+        </div>
       </div>
     </div>
   </main>

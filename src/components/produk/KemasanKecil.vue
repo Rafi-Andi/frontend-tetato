@@ -19,7 +19,7 @@ console.log(produks.value)
     <h2 class="judul">Kemasan 65 Gram</h2>
 
     <div class="container-card">
-      <CardProduk v-for="produk in produks" :key="produk.id" :img="produk.gambar" :title="produk.title" :harga=produk.harga :slug="produk.slug"/>
+      <CardProduk v-for="produk in produks" :key="produk.id" :category="produk.kemasan" :img="produk.gambar" :title="produk.title" :harga=produk.harga :slug="produk.slug"/>
     </div>
     <Pagination />
 

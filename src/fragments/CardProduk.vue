@@ -17,6 +17,9 @@ defineProps({
   slug: {
     type: String,
   },
+  category: {
+    type: String
+  }
 })
 </script>
 
@@ -26,6 +29,7 @@ defineProps({
       <img :src="img" alt="Tetato Chips" />
     </div>
     <div class="content">
+      <p class="category">{{ category }}</p>
       <h4>{{ title }}</h4>
       <div class="harga">
         <h2>{{ formatRupiah(harga) }}</h2>
@@ -95,13 +99,18 @@ defineProps({
 }
 
 .content {
+  display: flex;
+  flex-direction: column;
   margin-top: auto;
+  margin-top: 15px;
   width: 100%;
   transition: all 0.3s ease;
 }
 
-.content h4 {
-  margin-left: 15px;
+.category {
+  color: #444;
+  font-size: 13px;
+  font-weight: 600;
 }
 
 .card:hover .content {
@@ -123,12 +132,11 @@ defineProps({
 .harga {
   display: flex;
   align-items: center;
-  justify-content: center;
   gap: 0.5rem;
 }
 
 .harga h2 {
-  margin-top: -20px;
+  margin-top: -10px;
   font-weight: 600;
   color: #d4a300;
   font-size: 25px;
@@ -142,7 +150,7 @@ defineProps({
 
 .button-detail {
   background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
-  margin-top: -20px;
+  margin-top: -10px;
   border-radius: 50%;
   width: 26px;
   height: 26px;
@@ -186,7 +194,6 @@ defineProps({
 
 @media (max-width: 640px) {
   .judul {
-    margin-left: 20px;
     font-size: 24px;
   }
   .container-img:hover {

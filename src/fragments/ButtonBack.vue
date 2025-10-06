@@ -1,19 +1,16 @@
 <script setup>
-defineProps({
-  label: {
-    type: String,
-    default: 'Button',
-  },
-  color: {
-    type: String,
-    default: '#FFC300',
-  },
-})
+import {  useRouter } from 'vue-router';
+
+const router = useRouter()
+
+const goBack = () => {
+    router.back()
+}
 </script>
 
 <template>
-  <button class="btn" :style="{ backgroundColor: color }">
-    {{ label }}
+  <button @click="goBack" class="btn">
+    < Kembali
   </button>
 </template>
 
@@ -27,6 +24,7 @@ defineProps({
   font-weight: 600;
   transition: 0.2s ease;
   font-size: medium;
+  background-color: #FFC300;
 }
 
 .btn:hover {
