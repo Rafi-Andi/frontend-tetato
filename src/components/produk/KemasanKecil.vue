@@ -1,6 +1,17 @@
 <script setup>
 import CardProduk from '@/fragments/CardProduk.vue';
 import Pagination from '@/fragments/Pagination.vue';
+import { useProdukStore } from '@/stores/Produk';
+import { storeToRefs } from 'pinia';
+import { reactive } from 'vue';
+import { RouterView } from 'vue-router';
+
+const ProdukStore = useProdukStore()
+const {getByKemasan} = ProdukStore
+const kemasan = "65 Gram"
+
+const produks = getByKemasan(kemasan)
+console.log(produks.value)
 </script>
 
 <template>
@@ -8,9 +19,10 @@ import Pagination from '@/fragments/Pagination.vue';
     <h2 class="judul">Kemasan 65 Gram</h2>
 
     <div class="container-card">
-      <CardProduk v-for="i in 5" :key="i"/>
+      <CardProduk v-for="produk in produks" :key="produk.id" :img="produk.gambar" :title="produk.title" :harga=produk.harga :slug="produk.slug"/>
     </div>
     <Pagination />
+
   </main>
 </template>
 

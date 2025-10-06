@@ -11,26 +11,28 @@ const router = createRouter({
       path: '/',
       component: Beranda,
       name: 'beranda',
-      meta: {layout: 'default'}
+      meta: { layout: 'default' },
     },
     {
       path: '/produk',
       component: Produk,
       name: 'produk',
-      meta: {layout: 'default'}
+      meta: { layout: 'default' },
     },
     {
-      path: '/detail-produk',
+      path: '/produk/:slug',
       component: DetailProduk,
-      name: 'detail-produk',
-      meta: {layout: 'default'}
+      name: 'produk-detail',
+      meta: { layout: 'default' },
+      props: true,
     },
+
     {
       path: '/tentang-kami',
       component: TentangKami,
       name: 'tentang-kami',
-      meta: {layout: 'default'}
-    }
+      meta: { layout: 'default' },
+    },
   ],
 })
 

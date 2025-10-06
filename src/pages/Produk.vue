@@ -13,6 +13,7 @@ import PaketHemat from '@/components/produk/PaketHemat.vue'
   <PaketHemat />
   <KemasanKecil />
   <KemasanBesar />
+
 </template>
 
 <style scoped>

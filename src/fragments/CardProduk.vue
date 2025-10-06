@@ -1,4 +1,6 @@
 <script setup>
+import { formatRupiah } from '@/lib/FormatRupiah';
+
 defineProps({
   img: {
     type: String,
@@ -9,12 +11,11 @@ defineProps({
     default: 'Tetato Chips',
   },
   harga: {
-    type: String,
+    type: Number,
     default: 'Rp 15.000',
   },
-  router: {
+  slug: {
     type: String,
-    default: '/produk',
   },
 })
 </script>
@@ -27,8 +28,8 @@ defineProps({
     <div class="content">
       <h4>{{ title }}</h4>
       <div class="harga">
-        <h2>{{ harga }}</h2>
-        <router-link :to="router" class="button-detail">
+        <h2>{{ formatRupiah(harga) }}</h2>
+        <router-link :to="{ name: 'produk-detail', params: { slug } }" class="button-detail">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="14"
@@ -141,6 +142,7 @@ defineProps({
 
 .button-detail {
   background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+  margin-top: -20px;
   border-radius: 50%;
   width: 26px;
   height: 26px;
