@@ -1,7 +1,9 @@
-<script setup></script>
+<script setup>
+
+</script>
 
 <template>
-           <div class="main">
+        <div class="main">
             <div class="left-container">
                 <div class="main-text">
                     <div class="text1">
@@ -52,14 +54,14 @@
                 </div>
             </div>
             <div class="right-container">
-                <!-- <img src="img/Group 54.png" alt="Tetato Chips Product Image" width="460px" /> -->
+                <img src="/beranda.png" alt="Tetato Chips Product Image" width="460px" />
             </div>
         </div>
 </template>
 
 
-<style scoped>
-.main {
+<style scoped> 
+    .main {
     display: flex;
     margin-left: 50px;
     gap: 50px;

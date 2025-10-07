@@ -1,12 +1,26 @@
 <script setup>
 import { Icon } from '@iconify/vue';
+window.onscroll = function () {
+            scrollFunction();
+        };
+
+        function scrollFunction() {
+            const navbar = document.getElementById("mainNavbar");
+            const scrollThreshold = 10;
+
+            if (window.scrollY > scrollThreshold) {
+                navbar.classList.add("navbar-scrolled");
+            } else {
+                navbar.classList.remove("navbar-scrolled");
+            }
+        }
 </script>
 
 <template>
    <div class="homepage">
         <div class="navbar" id="mainNavbar">
             <div class="nav-logo">
-                <!-- <img width="100px" src="img/Desain tanpa judul (8).png" alt="Tetato Chips Logo" /> -->
+                 <img width="100px" src="/public/logo.png" alt="Tetato Chips Logo" /> -->
             </div>
             <div class="nav-isi">
                 <ul>
