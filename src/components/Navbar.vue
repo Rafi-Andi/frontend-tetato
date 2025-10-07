@@ -20,19 +20,19 @@ window.onscroll = function () {
    <div class="homepage">
         <div class="navbar" id="mainNavbar">
             <div class="nav-logo">
-                 <img width="100px" src="/public/logo.png" alt="Tetato Chips Logo" /> -->
+                 <img width="100px" src="/public/logo.png" alt="Tetato Chips Logo" />
             </div>
             <div class="nav-isi">
                 <ul>
                     <div class="nav-home">
-                        <li><a href="index.html">Beranda</a></li>
+                        <li><router-link :to="{name: 'beranda'}">Beranda</router-link></li>
                     </div>
-                    <li><a href="">Produk</a></li>
-                    <li><a href="">Tentang Kami</a></li>
+                    <li><router-link :to="{name: 'produk'}">Produk</router-link></li>
+                    <li><router-link :to="{name: 'tentang-kami'}">Tentang Kami</router-link></li>
                 </ul>
             </div>
             <div class="nav-cart">
-                <a href=""><Icon icon="mdi-cart"/></a>
+                <router-link :to="{name: 'keranjang-belanja'}"><Icon icon="mdi-cart"/></router-link>
             </div>
         </div>
     </div>
