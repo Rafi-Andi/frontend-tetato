@@ -20,13 +20,13 @@
 
     .main {
         display: flex;
-        justify-content: space-evenly;
+        justify-content: space-around;
         margin-top: 130px;
     }
 
     .h1 {
         font-family: 'dynapuff';
-        font-size: 40px; 
+        font-size: 48px; 
     }
 
     .button button {
