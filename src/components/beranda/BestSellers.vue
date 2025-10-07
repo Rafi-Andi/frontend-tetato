@@ -1,4 +1,7 @@
-<script setup></script>
+<!-- <script setup>
+import { Icon } from '@iconify/vue';
+
+</script>
 
 <template>
     <div class="bestseller-container">
@@ -14,11 +17,7 @@
                     <div class="best-img1">
                         <a href=""><img src="/best-produk.png" alt=""></a>
                         <div class="bintang1">
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
+                            <Icon v-for="i in 5" width="30px" :key="index" icon="mdi:star"/>
                         </div>
                         <div class="best-text">
                             <p>Tetato Chips <br> Varian Original</p>
@@ -33,11 +32,7 @@
                     <div class="best-img2">
                         <a href=""><img src="/best-produk.png" alt=""></a>
                         <div class="bintang2">
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
+                            <Icon v-for="i in 5" width="30px" :key="index" icon="mdi:star"/>
                         </div>
                         <div class="best-text">
                             <p>Tetato Chips <br> Varian Original</p>
@@ -154,4 +149,60 @@
     font-weight: 800;
     margin: 8%;
 }
+
+.best-content3 {
+    background-color: #FFCD29;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    height: fit-content;
+}
+</style> -->
+
+<template>
+    <main>
+        <header>
+            <h1>Best Sellers.</h1>
+            <p>Shop All</p>
+            <div>
+                >
+            </div>
+        </header>
+    </main>
+</template>
+
+<style scoped>
+
+header {
+    display: flex;
+    align-items: center;
+}
+header h1 {
+    font-weight: 700;
+    color: #D4A300;
+    font-family: "DynaPuff", sans-serif;
+}
+header p, div {
+    margin-top: 10px;
+    font-family: "Poppins", sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+}
+
+header p{
+    text-decoration: underline;
+    color: #353535;
+}
+
+header div {
+    background-color: #EF6A6A;
+    width: 20px;
+    height: 20px;
+    border-radius: 100%;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 </style>
