@@ -103,7 +103,7 @@
 }
 
 .button-text1 {
-    background-color: var(--color2);
+    background-color: #FFC300;
     border-color: #FFC300;
     color: white;
     border: none;
@@ -111,8 +111,8 @@
 
 .button-text2 {
     background-color: white;
-    color: var(--color2);
-    border: 3px solid var(--color2);
+    color: #FFC300;
+    border: 3px solid #FFC300;
 }
 
 .label-container {
