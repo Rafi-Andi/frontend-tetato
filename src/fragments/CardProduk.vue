@@ -1,5 +1,5 @@
 <script setup>
-import { formatRupiah } from '@/lib/FormatRupiah';
+import { formatRupiah } from '@/lib/FormatRupiah'
 
 defineProps({
   img: {
@@ -18,15 +18,15 @@ defineProps({
     type: String,
   },
   category: {
-    type: String
-  }
+    type: String,
+  },
 })
 </script>
 
 <template>
   <div class="card">
     <div class="container-img">
-      <img :src="img" alt="Tetato Chips"/>
+      <img :src="img" alt="Tetato Chips" />
     </div>
     <div class="content">
       <p class="category">{{ category }}</p>
@@ -83,6 +83,7 @@ defineProps({
 }
 
 .container-img img {
+  border-radius: 10px;
   width: 100%;
   height: auto;
   object-fit: contain;

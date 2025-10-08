@@ -6,7 +6,7 @@ export const useProdukStore = defineStore("produk-store", () => {
     {
       id: 1,
       slug: "tetato-korean-bbq-65-gram",
-      gambar: "public/bundling.webp",
+      gambar: "https://ik.imagekit.io/misxxns4p/produk/korean-65gram.webp",
       title: "Tetato Korean BBQ",
       kemasan: "65 Gram",
       harga: 15000,
@@ -16,7 +16,7 @@ export const useProdukStore = defineStore("produk-store", () => {
     {
       id: 2,
       slug: "tetato-chips-spicy-65-gram",
-      gambar: "public/bundling.webp",
+      gambar: "https://ik.imagekit.io/misxxns4p/produk/spicy-65gram.webp",
       title: "Tetato Chips Spicy",
       kemasan: "65 Gram",
       harga: 15000,
@@ -26,7 +26,7 @@ export const useProdukStore = defineStore("produk-store", () => {
     {
       id: 3,
       slug: "tetato-chips-original-65-gram",
-      gambar: "public/bundling.webp",
+      gambar: "https://ik.imagekit.io/misxxns4p/produk/original-65gram.webp",
       title: "Tetato Chips Original",
       kemasan: "65 Gram",
       harga: 15000,
@@ -36,7 +36,7 @@ export const useProdukStore = defineStore("produk-store", () => {
     {
       id: 4,
       slug: "tetato-sour-cream-65-gram",
-      gambar: "public/bundling.webp",
+      gambar: "https://ik.imagekit.io/misxxns4p/produk/sourcream-65gram.webp",
       title: "Tetato Sour Cream",
       kemasan: "65 Gram",
       harga: 15000,
@@ -46,7 +46,7 @@ export const useProdukStore = defineStore("produk-store", () => {
     {
       id: 5,
       slug: "tetato-roasted-corn-65-gram",
-      gambar: "public/bundling.webp",
+      gambar: "https://ik.imagekit.io/misxxns4p/produk/roasted-65gram.webp",
       title: "Tetato Roasted Corn",
       kemasan: "65 Gram",
       harga: 15000,
@@ -56,7 +56,7 @@ export const useProdukStore = defineStore("produk-store", () => {
     {
       id: 6,
       slug: "tetato-korean-bbq-250-gram",
-      gambar: "public/bundling.webp",
+      gambar: "https://ik.imagekit.io/misxxns4p/produk/korean-250gram.webp",
       title: "Tetato Korean BBQ",
       kemasan: "250 Gram",
       harga: 50000,
@@ -66,7 +66,7 @@ export const useProdukStore = defineStore("produk-store", () => {
     {
       id: 7,
       slug: "tetato-chips-spicy-250-gram",
-      gambar: "public/bundling.webp",
+      gambar: "https://ik.imagekit.io/misxxns4p/produk/spicy-250gram.webp",
       title: "Tetato Chips Spicy",
       kemasan: "250 Gram",
       harga: 50000,
@@ -76,7 +76,7 @@ export const useProdukStore = defineStore("produk-store", () => {
     {
       id: 8,
       slug: "tetato-chips-original-250-gram",
-      gambar: "public/bundling.webp",
+      gambar: "https://ik.imagekit.io/misxxns4p/produk/original-250gram.webp",
       title: "Tetato Chips Original",
       kemasan: "250 Gram",
       harga: 50000,
@@ -86,7 +86,7 @@ export const useProdukStore = defineStore("produk-store", () => {
     {
       id: 9,
       slug: "tetato-sour-cream-250-gram",
-      gambar: "public/bundling.webp",
+      gambar: "https://ik.imagekit.io/misxxns4p/produk/sourcream-250gram.webp",
       title: "Tetato Sour Cream",
       kemasan: "250 Gram",
       harga: 50000,
@@ -96,7 +96,7 @@ export const useProdukStore = defineStore("produk-store", () => {
     {
       id: 10,
       slug: "tetato-roasted-corn-250-gram",
-      gambar: "public/bundling.webp",
+      gambar: "https://ik.imagekit.io/misxxns4p/produk/roastedcorn-250gram.webp",
       title: "Tetato Roasted Corn",
       kemasan: "250 Gram",
       harga: 50000,

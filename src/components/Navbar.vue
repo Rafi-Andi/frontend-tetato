@@ -28,17 +28,14 @@ onUnmounted(() => {
 <template>
   <div class="homepage">
     <nav class="navbar" id="mainNavbar">
-      <!-- Logo -->
       <div class="nav-logo">
-        <img width="100px" src="/public/logo.webp" alt="Tetato Chips Logo" />
+        <img width="100px" src="https://ik.imagekit.io/misxxns4p/logo.webp" alt="Tetato Chips Logo" />
       </div>
 
-      <!-- Hamburger button -->
       <button class="hamburger" @click="isMenuOpen = !isMenuOpen">
         <Icon :icon="isMenuOpen ? 'mdi:close' : 'mdi:menu'" width="30px" />
       </button>
 
-      <!-- Navigation links -->
       <div class="nav-isi" :class="{ open: isMenuOpen }">
         <ul>
           <li><router-link :to="{ name: 'beranda' }" @click="isMenuOpen = false">Beranda</router-link></li>
@@ -47,7 +44,6 @@ onUnmounted(() => {
         </ul>
       </div>
 
-      <!-- Cart -->
       <div class="nav-cart">
         <router-link :to="{ name: 'keranjang-belanja' }">
           <Icon icon="mdi:cart-outline" />
@@ -58,7 +54,7 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
-/* ====== GENERAL ====== */
+
 .router-link-active {
   color: #d4a300;
 }
@@ -78,7 +74,6 @@ li a:hover {
   transition: all 0.2s;
 }
 
-/* ====== NAVBAR ====== */
 .navbar {
   display: flex;
   align-items: center;
@@ -104,7 +99,6 @@ li a:hover {
   display: block;
 }
 
-/* ====== MENU LINKS ====== */
 .nav-isi ul {
   display: flex;
   gap: 100px;
@@ -126,7 +120,6 @@ li a:hover {
   color: #d4a300;
 }
 
-/* ====== HAMBURGER ====== */
 .hamburger {
   background: none;
   border: none;
@@ -136,7 +129,6 @@ li a:hover {
   color: black;
 }
 
-/* ====== RESPONSIVE ====== */
 @media (max-width: 900px) {
   .navbar {
     padding: 10px 25px;
