@@ -48,7 +48,7 @@ import { Icon } from '@iconify/vue'
 <style scoped>
 
     .komitmen-container {
-        margin-top: 400px;
+        margin-top: 600px;
     }
 
     .judul {
