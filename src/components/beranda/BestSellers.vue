@@ -9,15 +9,19 @@ import { RouterLink } from 'vue-router'
     <header>
       <h1>Produk Terbaik.</h1>
       <p>Lihat Semua</p>
-      <router-link
-        class="router-link"
-        :to="{ name: 'produk'}"
+      <router-link class="router-link" :to="{ name: 'produk' }"
         ><div class="button-panah">></div></router-link
       >
     </header>
     <div class="container-card">
       <div class="card satu">
-        <img src="https://ik.imagekit.io/misxxns4p/banner/best-produk.webp" alt="Tetato Original" width="190px" />
+        <img
+          loading="lazy"
+          decoding="async"
+          src="https://ik.imagekit.io/misxxns4p/banner/best-produk.webp?tr=w-800,q-80,f-webp"
+          alt="Tetato Original"
+          width="190px"
+        />
         <div>
           <div class="bintang1">
             <Icon v-for="i in 5" width="25px" icon="mdi:star" color="#FFCD29" />
@@ -34,7 +38,13 @@ import { RouterLink } from 'vue-router'
         </div>
       </div>
       <div class="card dua">
-        <img src="https://ik.imagekit.io/misxxns4p/banner/best-produk-2.webp" alt="Tetato Roasted Corn" width="190px" />
+        <img
+          loading="lazy"
+          decoding="async"
+          src="https://ik.imagekit.io/misxxns4p/banner/best-produk-2.webp?tr=w-800,q-80,f-webp"
+          alt="Tetato Roasted Corn"
+          width="190px"
+        />
         <div>
           <div class="bintang1">
             <Icon v-for="i in 5" width="25px" icon="mdi:star" color="#FFCD29" />
@@ -54,7 +64,12 @@ import { RouterLink } from 'vue-router'
       </div>
       <div class="calltoaction">
         <div class="container-image">
-          <img src="https://ik.imagekit.io/misxxns4p/banner/double-produk.webp" alt="Tetato Produk" />
+          <img
+            loading="lazy"
+            decoding="async"
+            src="https://ik.imagekit.io/misxxns4p/banner/double-produk.webp?tr=q-80,f-webp"
+            alt="Tetato Produk"
+          />
         </div>
         <div class="content">
           <h2><span>Nikm</span>ati Kriuknya</h2>
@@ -62,8 +77,8 @@ import { RouterLink } from 'vue-router'
             Klik sekarang, cemilan enak siap <br />
             temani harimu!
           </p>
-          <router-link :to="{name: 'produk'}">
-            <Button  label="Beli Sekarang >" color="#BB0015" />
+          <router-link :to="{ name: 'produk' }">
+            <Button label="Beli Sekarang >" color="#BB0015" />
           </router-link>
         </div>
       </div>

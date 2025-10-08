@@ -47,7 +47,13 @@ import { Icon } from '@iconify/vue'
     </div>
 
     <div class="right-container">
-      <img src="https://ik.imagekit.io/misxxns4p/banner/beranda.webp" width="100%" alt="Tetato Chips Product Image" />
+      <img
+        loading="lazy"
+        decoding="async"
+        src="https://ik.imagekit.io/misxxns4p/banner/beranda.webp?tr=w-800,q-80,f-webp"
+        width="100%"
+        alt="Tetato Chips Product Image"
+      />
     </div>
   </div>
 </template>

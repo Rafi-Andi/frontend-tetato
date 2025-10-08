@@ -7,7 +7,13 @@
   <div class="card-container">
     <div class="test-card">
       <div class="product-card">
-        <img src="https://ik.imagekit.io/misxxns4p/banner/makan1.webp" alt="Cocok Untuk Semua Image" class="card-image" />
+        <img
+          loading="lazy"
+          decoding="async"
+          src="https://ik.imagekit.io/misxxns4p/banner/makan1.webp?tr=w-800,q-80,f-webp"
+          alt="Cocok Untuk Semua Image"
+          class="card-image"
+        />
       </div>
       <div class="card-text-overlay1">
         <h3>Cocok Untuk<br />Semua</h3>
@@ -15,7 +21,13 @@
     </div>
     <div class="test-card">
       <div class="product-card">
-        <img src="https://ik.imagekit.io/misxxns4p/banner/makan2.webp" alt="Camilan Kekinian Image" class="card-image" />
+        <img
+          loading="lazy"
+          decoding="async"
+          src="https://ik.imagekit.io/misxxns4p/banner/makan2.webp?tr=w-800,q-80,f-webp"
+          alt="Camilan Kekinian Image"
+          class="card-image"
+        />
       </div>
       <div class="card-text-overlay1">
         <h3>
@@ -26,7 +38,13 @@
     </div>
     <div class="test-card">
       <div class="product-card">
-        <img src="https://ik.imagekit.io/misxxns4p/banner/makan3.webp" alt="Ukuran Praktis Image" class="card-image" />
+        <img
+          loading="lazy"
+          decoding="async"
+          src="https://ik.imagekit.io/misxxns4p/banner/makan3.webp?tr=w-800,q-80,f-webp"
+          alt="Ukuran Praktis Image"
+          class="card-image"
+        />
       </div>
       <div class="card-text-overlay1">
         <h3>
@@ -39,7 +57,6 @@
 </template>
 
 <style scoped>
-
 .text-card {
   font-family: 'dynapuff';
   color: #d4a300;

@@ -26,7 +26,7 @@ defineProps({
 <template>
   <div class="card">
     <div class="container-img">
-      <img :src="img" alt="Tetato Chips" />
+      <img :src="img" alt="Tetato Chips" loading="lazy" decoding="async" />
     </div>
     <div class="content">
       <p class="category">{{ category }}</p>

@@ -60,7 +60,9 @@ const handleCheckout = () => {
       <p>{{ slug }}</p>
     </header>
     <div class="container-content">
-      <aside><img src="/public/bundling.webp" width="400px" alt="" /></aside>
+      <aside>
+        <img loading="lazy" decoding="async" src="/public/bundling.webp" width="400px" alt="" />
+      </aside>
       <div class="content">
         <p class="label">{{ data.kemasan }}</p>
         <h1 class="varian">{{ data.title }}</h1>
