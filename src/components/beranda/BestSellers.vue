@@ -17,7 +17,7 @@ import { RouterLink } from 'vue-router'
     </header>
     <div class="container-card">
       <div class="card satu">
-        <img src="/best-produk.webp" alt="Tetato Original" width="190px" />
+        <img src="https://ik.imagekit.io/misxxns4p/banner/best-produk.webp" alt="Tetato Original" width="190px" />
         <div>
           <div class="bintang1">
             <Icon v-for="i in 5" width="25px" icon="mdi:star" color="#FFCD29" />
@@ -34,7 +34,7 @@ import { RouterLink } from 'vue-router'
         </div>
       </div>
       <div class="card dua">
-        <img src="/best-produk-2.webp" alt="Tetato Roasted Corn" width="190px" />
+        <img src="https://ik.imagekit.io/misxxns4p/banner/best-produk-2.webp" alt="Tetato Roasted Corn" width="190px" />
         <div>
           <div class="bintang1">
             <Icon v-for="i in 5" width="25px" icon="mdi:star" color="#FFCD29" />
@@ -54,7 +54,7 @@ import { RouterLink } from 'vue-router'
       </div>
       <div class="calltoaction">
         <div class="container-image">
-          <img src="/double-produk.webp" alt="Tetato Produk" />
+          <img src="https://ik.imagekit.io/misxxns4p/banner/double-produk.webp" alt="Tetato Produk" />
         </div>
         <div class="content">
           <h2><span>Nikm</span>ati Kriuknya</h2>

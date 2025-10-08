@@ -7,7 +7,7 @@
   <div class="card-container">
     <div class="test-card">
       <div class="product-card">
-        <img src="/makan1.webp" alt="Cocok Untuk Semua Image" class="card-image" />
+        <img src="https://ik.imagekit.io/misxxns4p/banner/makan1.webp" alt="Cocok Untuk Semua Image" class="card-image" />
       </div>
       <div class="card-text-overlay1">
         <h3>Cocok Untuk<br />Semua</h3>
@@ -15,7 +15,7 @@
     </div>
     <div class="test-card">
       <div class="product-card">
-        <img src="/makan2.webp" alt="Camilan Kekinian Image" class="card-image" />
+        <img src="https://ik.imagekit.io/misxxns4p/banner/makan2.webp" alt="Camilan Kekinian Image" class="card-image" />
       </div>
       <div class="card-text-overlay1">
         <h3>
@@ -26,7 +26,7 @@
     </div>
     <div class="test-card">
       <div class="product-card">
-        <img src="/makan3.webp" alt="Ukuran Praktis Image" class="card-image" />
+        <img src="https://ik.imagekit.io/misxxns4p/banner/makan3.webp" alt="Ukuran Praktis Image" class="card-image" />
       </div>
       <div class="card-text-overlay1">
         <h3>

@@ -10,7 +10,7 @@
             </div>
         </div>
         <div class="right-container">
-            <img src="/chipsproduk.webp" alt="">
+            <img src="https://ik.imagekit.io/misxxns4p/banner/chipsproduk.webp" alt="">
         </div>
     </div>
 </template>

@@ -7,7 +7,7 @@
         </div>
         <div class="content">
             <div class="left-container">
-                <img src="/cerita.webp" alt="" width="550px">
+                <img src="https://ik.imagekit.io/misxxns4p/banner/cerita.webp" alt="" width="550px">
             </div>
             <div class="right-container">
                 <h1>Berawal Dari Ide <br> Sedeharna</h1>

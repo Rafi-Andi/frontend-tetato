@@ -38,7 +38,7 @@ import { Icon } from '@iconify/vue'
                 </div>
             </div>
             <div class="right-container">
-                <img src="/komitmen.webp" alt="" width="370px">
+                <img src="https://ik.imagekit.io/misxxns4p/banner/komitmen.webp" alt="" width="370px">
             </div>
         </div>
     </div>
