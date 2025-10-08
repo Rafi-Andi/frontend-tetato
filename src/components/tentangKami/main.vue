@@ -10,7 +10,7 @@
             </div>
         </div>
         <div class="right-container">
-            <img src="/chipsproduk.png" alt="">
+            <img src="/chipsproduk.webp" alt="">
         </div>
     </div>
 </template>

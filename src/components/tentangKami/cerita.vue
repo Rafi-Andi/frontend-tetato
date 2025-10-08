@@ -7,7 +7,7 @@
         </div>
         <div class="content">
             <div class="left-container">
-                <img src="/cerita.png" alt="" width="400px">
+                <img src="/cerita.webp" alt="" width="400px">
             </div>
             <div class="right-container">
                 <h1>Berawal Dari Ide <br> Sedeharna</h1>

@@ -47,7 +47,7 @@ import { Icon } from '@iconify/vue'
     </div>
 
     <div class="right-container">
-      <img src="/beranda.png" alt="Tetato Chips Product Image" />
+      <img src="/beranda.webp" width="100%" alt="Tetato Chips Product Image" />
     </div>
   </div>
 </template>

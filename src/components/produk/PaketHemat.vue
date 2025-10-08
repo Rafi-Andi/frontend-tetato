@@ -6,7 +6,7 @@ import Button from '@/fragments/Button.vue'
 <template>
   <main>
     <aside>
-      <img src="/public/bundling.png" alt="Bundling Hemat Tetato" />
+      <img src="/public/bundling.webp" alt="Bundling Hemat Tetato" />
     </aside>
 
     <div class="content">

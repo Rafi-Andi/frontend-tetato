@@ -30,7 +30,7 @@ onUnmounted(() => {
     <nav class="navbar" id="mainNavbar">
       <!-- Logo -->
       <div class="nav-logo">
-        <img width="100px" src="/public/logo.png" alt="Tetato Chips Logo" />
+        <img width="100px" src="/public/logo.webp" alt="Tetato Chips Logo" />
       </div>
 
       <!-- Hamburger button -->
