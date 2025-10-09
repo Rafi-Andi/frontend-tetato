@@ -1,9 +1,7 @@
 <script setup></script>
 
 <template>
-    <!-- ngoding html e ng kene -->
-
-     <h1>Ini Testimoni beranda</h1>
+    <h1>ini testimoni</h1>
 </template>
 
 

@@ -5,15 +5,16 @@ import PaketHemat from '@/components/produk/PaketHemat.vue'
 </script>
 
 <template>
-  <header>
-    <h1>Temukan Varian Rasa Favoritmu</h1>
-    <p>Rasa kekinian yang bikin nagih dari gigitan pertama.</p>
-  </header>
+  <main>
+    <header>
+      <h1>Temukan Varian Rasa Favoritmu</h1>
+      <p>Rasa kekinian yang bikin nagih dari gigitan pertama.</p>
+    </header>
 
-  <PaketHemat />
-  <KemasanKecil />
-  <KemasanBesar />
-
+    <PaketHemat />
+    <KemasanKecil />
+    <!-- <KemasanBesar /> -->
+  </main>
 </template>
 
 <style scoped>
@@ -22,6 +23,11 @@ header {
   margin: 60px auto 40px auto;
   padding: 0 20px;
   max-width: 900px;
+}
+
+main {
+  padding: 10px;
+  padding-top: 30px;
 }
 
 header h1 {
