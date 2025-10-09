@@ -95,7 +95,7 @@ const jumlah = getJumlahProduk()
 main {
   font-family: 'Poppins', sans-serif;
   padding: 20px;
-  padding-top: 50px;
+  padding-top: 100px;
   max-width: 1200px;
   margin: auto;
 }
