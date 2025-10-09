@@ -7,16 +7,15 @@ import { reactive } from 'vue';
 import { RouterView } from 'vue-router';
 
 const ProdukStore = useProdukStore()
-const {getByKemasan} = ProdukStore
-const kemasan = "65 Gram"
 
-const produks = getByKemasan(kemasan)
+const {produks} = storeToRefs(ProdukStore)
+
 console.log(produks.value)
 </script>
 
 <template>
   <main>
-    <h2 class="judul">Kemasan 65 Gram</h2>
+    <h2 class="judul">Produk Kami</h2>
 
     <div class="container-card">
       <CardProduk v-for="produk in produks" :key="produk.id" :category="produk.kemasan" :img="produk.gambar" :title="produk.title" :harga=produk.harga :slug="produk.slug"/>

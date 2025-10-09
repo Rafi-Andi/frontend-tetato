@@ -4,7 +4,6 @@ import { ref, onMounted, onUnmounted } from 'vue'
 
 const isMenuOpen = ref(false)
 
-// ✅ Scroll efek (navbar transparan -> putih)
 function scrollFunction() {
   const navbar = document.getElementById('mainNavbar')
   const scrollThreshold = 10
@@ -29,7 +28,11 @@ onUnmounted(() => {
   <div class="homepage">
     <nav class="navbar" id="mainNavbar">
       <div class="nav-logo">
-        <img width="100px" src="https://ik.imagekit.io/misxxns4p/logo.webp" alt="Tetato Chips Logo" />
+        <img
+          width="100px"
+          src="https://ik.imagekit.io/misxxns4p/logo.webp"
+          alt="Tetato Chips Logo"
+        />
       </div>
 
       <button class="hamburger" @click="isMenuOpen = !isMenuOpen">
@@ -38,23 +41,37 @@ onUnmounted(() => {
 
       <div class="nav-isi" :class="{ open: isMenuOpen }">
         <ul>
-          <li><router-link :to="{ name: 'beranda' }" @click="isMenuOpen = false">Beranda</router-link></li>
-          <li><router-link :to="{ name: 'produk' }" @click="isMenuOpen = false">Produk</router-link></li>
-          <li><router-link :to="{ name: 'tentang-kami' }" @click="isMenuOpen = false">Tentang Kami</router-link></li>
+          <li>
+            <router-link :to="{ name: 'beranda' }" @click="isMenuOpen = false">
+              <Icon class="icon-nav" icon="mdi:home-outline" width="22px" /> Beranda
+            </router-link>
+          </li>
+          <li>
+            <router-link :to="{ name: 'produk' }" @click="isMenuOpen = false">
+              <Icon class="icon-nav" icon="mdi:bag-personal-outline" width="22px" /> Produk
+            </router-link>
+          </li>
+          <li>
+            <router-link :to="{ name: 'tentang-kami' }" @click="isMenuOpen = false">
+              <Icon class="icon-nav" icon="mdi:information-outline" width="22px" /> Tentang Kami
+            </router-link>
+          </li>
         </ul>
       </div>
 
       <div class="nav-cart">
         <router-link :to="{ name: 'keranjang-belanja' }">
-          <Icon icon="mdi:cart-outline" />
+          <Icon icon="mdi:cart-outline" width="26px" />
         </router-link>
+        <div class="jumlah-keranjang">
+          <p>1</p>
+        </div>
       </div>
     </nav>
   </div>
 </template>
 
 <style scoped>
-
 .router-link-active {
   color: #d4a300;
 }
@@ -63,15 +80,22 @@ ul li {
   list-style: none;
 }
 
+.icon-nav {
+  display: none;
+}
+
 li a {
   color: black;
   text-decoration: none;
   font-family: 'Poppins', sans-serif;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 li a:hover {
   color: #d4a300;
-  transition: all 0.2s;
+  transition: all 0.2s ease-in-out;
 }
 
 .navbar {
@@ -84,15 +108,14 @@ li a:hover {
   top: 0;
   left: 0;
   background-color: transparent;
-  transition:
-    background-color 0.3s ease,
-    box-shadow 0.3s ease;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
   z-index: 9999;
 }
 
 .navbar-scrolled {
-  background-color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.9);
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
 }
 
 .nav-logo img {
@@ -110,6 +133,7 @@ li a:hover {
 .nav-cart {
   font-size: 30px;
   text-align: center;
+  position: relative;
 }
 
 .nav-cart a {
@@ -118,6 +142,20 @@ li a:hover {
 
 .nav-cart a:hover {
   color: #d4a300;
+}
+
+.jumlah-keranjang {
+  position: absolute;
+  top: 0;
+  font-weight: 600;
+  background-color: #d4a300;
+  color: white;
+  border-radius: 50px;
+  right: 800;
+  padding: 5px 10px;
+  transform: translateX(20px);
+  transform: translateY(-30px);
+  font-size: 20px;
 }
 
 .hamburger {
@@ -139,19 +177,22 @@ li a:hover {
     z-index: 10000;
   }
 
+  .icon-nav {
+  display: block;
+}
+
   .nav-isi {
     position: fixed;
     top: 0;
     right: 0;
-    width: 70%;
+    width: 40%;
     height: 100vh;
-    background-color: white;
-    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+    box-shadow: -2px 0 15px rgba(0, 0, 0, 0.1);
     transform: translateX(100%);
     transition: transform 0.3s ease;
     display: flex;
     justify-content: center;
-    align-items: center;
   }
 
   .nav-isi.open {
@@ -160,8 +201,14 @@ li a:hover {
 
   .nav-isi ul {
     flex-direction: column;
-    gap: 30px;
-    text-align: center;
+    transform: translateY(100px);
+    gap: 25px;
+    text-align: left;
+  }
+
+  .nav-isi ul li a {
+    font-size: 1.1rem;
+    padding: 10px 0;
   }
 
   .nav-cart {
@@ -177,11 +224,15 @@ li a:hover {
 
 @media (max-width: 500px) {
   .nav-isi {
-    width: 80%;
+    width: 55%;
   }
 
   .nav-cart {
     right: 70px;
+  }
+
+  .nav-isi ul li a {
+    font-size: 1rem;
   }
 }
 </style>

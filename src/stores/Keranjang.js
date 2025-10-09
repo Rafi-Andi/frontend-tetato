@@ -1,9 +1,12 @@
+import showAlert from '@/lib/Swal'
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 const KERANJANG_KEY = 'keranjang-belanja'
 
 export const useKeranjangStore = defineStore('keranjang-store', () => {
   const keranjangBelanja = ref(JSON.parse(localStorage.getItem('keranjang-belanja')) || [])
+  const jumlahProduk = ref(0)
+  const totalHarga = ref(0)
 
   const getKeranjang = () => {
     console.log(keranjangBelanja.value)
@@ -24,6 +27,10 @@ export const useKeranjangStore = defineStore('keranjang-store', () => {
 
     dataKeranjang.splice(index, 1)
     localStorage.setItem(KERANJANG_KEY, JSON.stringify(dataKeranjang))
+
+    getJumlahProduk()
+    getTotalHarga()
+
   }
 
   const getJumlahProduk = () => {
@@ -35,19 +42,18 @@ export const useKeranjangStore = defineStore('keranjang-store', () => {
     }
 
     console.log(jumlah)
-    return jumlah
+    jumlahProduk.value = jumlah
   }
   const getTotalHarga = () => {
     const dataKeranjang = getKeranjang()
     console.log(dataKeranjang)
-    let totalHarga = 0
+    let harga = 0
     for (let index = 0; index < dataKeranjang.length; index++) {
-      totalHarga += dataKeranjang[index].total
+      harga += dataKeranjang[index].total
     }
 
-    console.log(totalHarga)
-    return totalHarga
+    totalHarga.value = harga
   }
 
-  return { keranjangBelanja, addKeranjang, getKeranjang, hapusKeranjang, getJumlahProduk, getTotalHarga }
+  return { keranjangBelanja, addKeranjang, getKeranjang, hapusKeranjang, getJumlahProduk, getTotalHarga, totalHarga, jumlahProduk }
 })

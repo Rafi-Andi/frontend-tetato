@@ -1,20 +1,27 @@
 <script setup>
 import Button from '@/fragments/Button.vue'
-import ButtonBack from '@/fragments/ButtonBack.vue';
-import { formatRupiah } from '@/lib/FormatRupiah';
-import { useKeranjangStore } from '@/stores/Keranjang';
-import { storeToRefs } from 'pinia';
-import { onMounted } from 'vue';
+import ButtonBack from '@/fragments/ButtonBack.vue'
+import { formatRupiah } from '@/lib/FormatRupiah'
+import showAlert from '@/lib/Swal'
+import { useKeranjangStore } from '@/stores/Keranjang'
+import { storeToRefs } from 'pinia'
+import { onMounted } from 'vue'
 
 const KeranjangStore = useKeranjangStore()
 
-
-const {getJumlahProduk, hapusKeranjang, getKeranjang, getTotalHarga} = KeranjangStore
+const { totalHarga, jumlahProduk } = storeToRefs(KeranjangStore)
+const { getJumlahProduk, hapusKeranjang, getKeranjang, getTotalHarga } = KeranjangStore
 const produks = getKeranjang()
-const totalHarga = getTotalHarga()
 
-const jumlah = getJumlahProduk()
+const handlerHapus = (index) => {
+  hapusKeranjang(index)
 
+  showAlert('Berhasil Hapus', 'Produk anda telah di hapus dari keranjang', 'success')
+}
+onMounted(() => {
+  getJumlahProduk()
+  getTotalHarga()
+})
 </script>
 
 <template>
@@ -36,7 +43,7 @@ const jumlah = getJumlahProduk()
           <tbody>
             <tr v-for="(item, index) in produks" :key="index">
               <td class="produk">
-                <div @click="hapusKeranjang(index)" class="button-delete">X</div>
+                <div @click="handlerHapus(index)" class="button-delete">X</div>
                 <aside>
                   <img :src="item.gambar" width="100px" alt="" />
                 </aside>
@@ -67,10 +74,7 @@ const jumlah = getJumlahProduk()
         </div>
         <div class="container-input">
           <label for="alamat">Alamat</label>
-          <textarea
-            id="alamat"
-            placeholder="Ketegan RT 07 / 02, Ketegan Taman Sidoarjo"
-          ></textarea>
+          <textarea id="alamat" placeholder="Ketegan RT 07 / 02, Ketegan Taman Sidoarjo"></textarea>
         </div>
       </div>
 
@@ -78,7 +82,7 @@ const jumlah = getJumlahProduk()
         <h2>Ringkasan :</h2>
         <div class="content-ringkasan jumlah">
           <p>Jumlah Produk</p>
-          <p>{{ jumlah }} Pcs</p>
+          <p>{{ jumlahProduk }} Pcs</p>
         </div>
         <div class="content-ringkasan total">
           <p>Total</p>
@@ -270,6 +274,7 @@ h5 {
 @media (max-width: 576px) {
   main {
     padding: 10px;
+    padding-top: 80px;
   }
 
   .title {

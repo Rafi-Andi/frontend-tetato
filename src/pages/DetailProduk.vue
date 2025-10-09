@@ -2,6 +2,7 @@
 import Button from '@/fragments/Button.vue'
 import ButtonBack from '@/fragments/ButtonBack.vue'
 import { formatRupiah } from '@/lib/FormatRupiah'
+import showAlert from '@/lib/Swal'
 import { useKeranjangStore } from '@/stores/Keranjang'
 import { useProdukStore } from '@/stores/Produk'
 import { computed, onMounted, reactive, ref, watch } from 'vue'
@@ -49,6 +50,8 @@ const handleCheckout = () => {
   addKeranjang(dataCheckOut.value)
 
   dataCheckOut.value = {}
+
+  showAlert('Berhasil', 'Berhasil menambahkan ke keranjang', 'success')
 }
 </script>
 
