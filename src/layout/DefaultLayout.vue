@@ -9,7 +9,7 @@ import Navbar from '@/components/Navbar.vue'
     <slot />
   </main>
 
-  <!-- <FooterKita /> -->
+  <FooterKita />
 </template>
 
 <style scoped></style>
