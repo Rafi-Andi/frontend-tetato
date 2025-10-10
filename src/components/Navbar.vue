@@ -1,5 +1,7 @@
 <script setup>
+import { useKeranjangStore } from '@/stores/Keranjang'
 import { Icon } from '@iconify/vue'
+import { storeToRefs } from 'pinia'
 import { ref, onMounted, onUnmounted } from 'vue'
 
 const isMenuOpen = ref(false)
@@ -22,6 +24,10 @@ onMounted(() => {
 onUnmounted(() => {
   window.removeEventListener('scroll', scrollFunction)
 })
+
+const KeranjangStore = useKeranjangStore()
+const {totalKeranjang} = storeToRefs(KeranjangStore)
+
 </script>
 
 <template>
@@ -64,7 +70,7 @@ onUnmounted(() => {
           <Icon icon="mdi:cart-outline" width="26px" />
         </router-link>
         <div class="jumlah-keranjang">
-          <p>1</p>
+          <p>{{ totalKeranjang }}</p>
         </div>
       </div>
     </nav>
@@ -147,16 +153,21 @@ li a:hover {
 .jumlah-keranjang {
   position: absolute;
   top: 0;
-  font-weight: 600;
+  right: 0;
   background-color: #d4a300;
   color: white;
-  border-radius: 50px;
-  right: 800;
-  padding: 5px 10px;
-  transform: translateX(20px);
-  transform: translateY(-30px);
-  font-size: 20px;
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 12px;
+  font-weight: 600;
+  transform: translate(10px, -8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
 }
+
 
 .hamburger {
   background: none;
@@ -168,6 +179,12 @@ li a:hover {
 }
 
 @media (max-width: 900px) {
+  .jumlah-keranjang {
+    font-size: 10px;
+    min-width: 16px;
+    height: 16px;
+    transform: translate(8px, -6px);
+  }
   .navbar {
     padding: 10px 25px;
   }
