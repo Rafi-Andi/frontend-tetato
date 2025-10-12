@@ -1,19 +1,55 @@
 <script setup>
 import { Icon } from '@iconify/vue'
 import Button from '@/fragments/Button.vue'
+import { useKeranjangStore } from '@/stores/Keranjang'
+import { ref } from 'vue'
+import showAlert from '@/lib/Swal'
+
+const KeranjangStore = useKeranjangStore()
+const { addKeranjang } = KeranjangStore
+
+const dataCheckOut = ref({})
+
+
+const data = ref({
+  title: 'Bundling Hemat 4 Pcs',
+  kemasan: 'Paket Bundling',
+  gambar: 'https://ik.imagekit.io/misxxns4p/banner/bundling.webp',
+  harga: 57000,
+  jumlah: 1,
+  total: 57000
+})
+
+const handleAddKeranjang = () => {
+  dataCheckOut.value = {
+    nama: data.value.title,
+    kategori: data.value.kemasan,
+    gambar: data.value.gambar,
+    harga: data.value.harga,
+    jumlah: data.value.jumlah,
+    total: data.value.total,
+  }
+
+  addKeranjang(dataCheckOut.value)
+
+  dataCheckOut.value = {}
+
+  showAlert('Berhasil', 'Berhasil menambahkan ke keranjang', 'success')
+}
 </script>
 
 <template>
   <main>
     <aside>
-      <img src="https://ik.imagekit.io/misxxns4p/banner/bundling.webp" alt="Bundling Hemat Tetato" />
+      <img
+        src="https://ik.imagekit.io/misxxns4p/banner/bundling.webp"
+        alt="Bundling Hemat Tetato"
+      />
     </aside>
 
     <div class="content">
       <p class="subtitle">Paket Hemat</p>
-      <h1 id="title">
-        Bundling Hemat 4 Pcs – <span>Gurih & Renyah Lebih Puas</span>
-      </h1>
+      <h1 id="title">Bundling Hemat 4 Pcs – <span>Gurih & Renyah Lebih Puas</span></h1>
       <p class="desc">
         Ngemil enak gak harus mahal. Paket hemat 4 pcs Tetato Chips bikin kamu bebas sharing bareng
         sahabat tanpa takut kantong jebol.
@@ -25,7 +61,9 @@ import Button from '@/fragments/Button.vue'
           <p>Lebih Hemat</p>
         </div>
         <div class="label">
-          <div class="icon"><Icon icon="mdi:emoticon-tongue-outline" color="#FFC300" width="26" /></div>
+          <div class="icon">
+            <Icon icon="mdi:emoticon-tongue-outline" color="#FFC300" width="26" />
+          </div>
           <p>Gurih dan Renyah</p>
         </div>
         <div class="label">
@@ -43,7 +81,7 @@ import Button from '@/fragments/Button.vue'
         <h3>Rp 60.000</h3>
       </div>
 
-      <Button label="Tambah ke keranjang" />
+      <Button @click="handleAddKeranjang" label="Tambah ke keranjang" />
     </div>
   </main>
 </template>
