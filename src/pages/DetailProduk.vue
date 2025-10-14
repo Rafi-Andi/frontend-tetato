@@ -109,7 +109,7 @@ const handleCheckout = () => {
 
 <style scoped>
 main {
-  padding: 100px 20px;
+  padding: 10px 20px;
   position: relative;
 }
 
