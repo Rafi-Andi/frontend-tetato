@@ -7,7 +7,6 @@ import { Icon } from '@iconify/vue';
 <template>
         <footer class="footer">
         <div class="footer-container">
-            <!-- Kolom 1: Tentang Kami -->
             <div class="footer-section about">
          <img width="100px"
           src="https://ik.imagekit.io/misxxns4p/logo.webp"
@@ -23,7 +22,6 @@ import { Icon } from '@iconify/vue';
                 </div>
             </div>
 
-            <!-- Kolom 2: Navigasi -->
             <div class="footer-section nav">
                 <h3>Navigasi</h3>
                 <ul>
@@ -33,7 +31,6 @@ import { Icon } from '@iconify/vue';
                 </ul>
             </div>
 
-            <!-- Kolom 3: Sosial Media -->
             <div class="footer-section social">
                 <h3>Sosial Media</h3>
                 <div class="social-icons">
@@ -71,7 +68,6 @@ import { Icon } from '@iconify/vue';
     padding-bottom: 30px;
 }
 
-/* Kolom Tentang Kami */
 .footer-section.about .logo {
     width: 120px;
     margin-bottom: 15px;
@@ -106,7 +102,6 @@ import { Icon } from '@iconify/vue';
     font-size: 16px;
 }
 
-/* Kolom Navigasi */
 .footer-section.nav h3 {
     margin-bottom: 15px;
 }
@@ -130,7 +125,6 @@ import { Icon } from '@iconify/vue';
     opacity: 0.7;
 }
 
-/* Kolom Sosial Media */
 .footer-section.social h3 {
     margin-bottom: 15px;
 }
@@ -167,7 +161,6 @@ import { Icon } from '@iconify/vue';
     filter: invert(89%) sepia(69%) saturate(1567%) hue-rotate(359deg) brightness(104%) contrast(101%);
 }
 
-/* Footer Bottom */
 .footer-bottom {
     border-top: 2px solid #ffffff;
     padding: 20px 0;
@@ -181,7 +174,6 @@ import { Icon } from '@iconify/vue';
     color: #000000;
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
     .footer-container {
         grid-template-columns: 1fr;
