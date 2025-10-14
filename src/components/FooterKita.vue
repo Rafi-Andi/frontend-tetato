@@ -18,8 +18,8 @@ import { Icon } from '@iconify/vue';
                     dan dibuat dari bahan pilihan.
                 </p>
                 <div class="contact">
-                    <p><i class="fa-solid fa-phone"></i> +62 823–3706–9983</p>
-                    <p><i class="fa-brands fa-instagram"></i> @tetato.id</p>
+                    <p><Icon icon="mdi-phone" width="18"></Icon> +62 823–3706–9983</p>
+                    <p><Icon icon="mdi-instagram" width="18"></Icon> @tetato.id</p>
                 </div>
             </div>
 
