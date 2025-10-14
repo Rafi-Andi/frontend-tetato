@@ -25,7 +25,7 @@ const router = createRouter({
       path: '/produk/:slug',
       component: DetailProduk,
       name: 'produk-detail',
-      meta: { layout: 'default' },
+      meta: {layout: 'default'},
       props: true,
     },
 
@@ -38,12 +38,13 @@ const router = createRouter({
     {
       path: '/keranjang-belanja',
       component: KeranjangBelanja,
+      meta: {layout: 'blank-layout'},
       name: 'keranjang-belanja'
     },
     {
       path: '/auth/login',
       component: Login,
-      meta: {layout: 'auth'}
+      meta: {layout: 'blank-layout'}
     }
   ],
 })

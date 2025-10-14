@@ -98,8 +98,7 @@ onMounted(() => {
 <style scoped>
 main {
   font-family: 'Poppins', sans-serif;
-  padding: 20px;
-  padding-top: 100px;
+  padding-top: 50px;
   max-width: 1200px;
   margin: auto;
 }
