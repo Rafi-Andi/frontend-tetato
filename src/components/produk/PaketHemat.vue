@@ -12,6 +12,7 @@ const dataCheckOut = ref({})
 
 
 const data = ref({
+  id: 11,
   title: 'Bundling Hemat 4 Pcs',
   kemasan: 'Paket Bundling',
   gambar: 'https://ik.imagekit.io/misxxns4p/banner/bundling.webp',
@@ -22,6 +23,7 @@ const data = ref({
 
 const handleAddKeranjang = () => {
   dataCheckOut.value = {
+    id: data.value.id,
     nama: data.value.title,
     kategori: data.value.kemasan,
     gambar: data.value.gambar,

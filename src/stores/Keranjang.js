@@ -12,7 +12,7 @@ export const useKeranjangStore = defineStore('keranjang-store', () => {
 
   const getKeranjang = () => {
     console.log(keranjangBelanja.value)
-    return keranjangBelanja.value
+    return JSON.parse(localStorage.getItem('keranjang-belanja'))
   }
 
   const addKeranjang = (data) => {
@@ -21,18 +21,17 @@ export const useKeranjangStore = defineStore('keranjang-store', () => {
     dataKeranjang.push({...data})
     localStorage.setItem(KERANJANG_KEY, JSON.stringify(dataKeranjang))
 
-    console.log(dataKeranjang)
+    keranjangBelanja.value = getKeranjang()
   }
 
   const hapusKeranjang = (index) => {
     const dataKeranjang = getKeranjang()
 
-    dataKeranjang.splice(index, 1)
-    localStorage.setItem(KERANJANG_KEY, JSON.stringify(dataKeranjang))
+    keranjangBelanja.value.splice(index, 1)
+    localStorage.setItem(KERANJANG_KEY, JSON.stringify(keranjangBelanja.value))
 
     getJumlahProduk()
     getTotalHarga()
-
   }
 
   const getJumlahProduk = () => {

@@ -5,20 +5,29 @@ import { formatRupiah } from '@/lib/FormatRupiah'
 import showAlert from '@/lib/Swal'
 import { useKeranjangStore } from '@/stores/Keranjang'
 import { useProdukStore } from '@/stores/Produk'
-import { computed, onMounted, reactive, ref, watch } from 'vue'
+import axios from 'axios'
+import { computed, onBeforeMount, onMounted, reactive, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
-const props = defineProps(['slug'])
+const data = ref({})
 
-const { slug } = props
-const ProdukStore = useProdukStore()
-
-const { getProduk } = ProdukStore
-
-const data = getProduk(slug)
+const router = useRoute()
+const slug = router.params.slug
+console.log(slug)
 
 const kuantitas = ref(1)
-const totalHarga = computed(() => data.harga * kuantitas.value)
+const totalHarga = computed(() => data?.value?.harga * kuantitas.value)
+
+const fetchDetailProduks = async () => {
+  try {
+    const response = await axios.get(`http://127.0.0.1:8000/api/produk/${slug}`)
+    console.log(response)
+    data.value = response.data.data[0]
+    console.log(data.value.nama_produk)
+  } catch (error) {
+    console.log(error)
+  }
+}
 
 const tambah = () => {
   kuantitas.value++
@@ -31,6 +40,10 @@ const kurang = () => {
   }
 }
 
+onMounted( async() => {
+  await fetchDetailProduks()
+})
+
 const KeranjangStore = useKeranjangStore()
 
 const { addKeranjang } = KeranjangStore
@@ -38,11 +51,16 @@ const { addKeranjang } = KeranjangStore
 const dataCheckOut = ref({})
 
 const handleCheckout = () => {
+  if (!data.value) {
+    showAlert('Gagal', 'Data produk belum dimuat.', 'error')
+    return
+  }
   dataCheckOut.value = {
-    nama: data.title,
-    kategori: data.kemasan,
-    gambar: data.gambar,
-    harga: data.harga,
+    id: data.value.id,
+    nama: data.value.nama_produk,
+    kategori: data.value.kategori.nama_kategori,
+    gambar: data.value.url_image,
+    harga: data.value.harga,
     jumlah: kuantitas.value,
     total: totalHarga.value,
   }
@@ -64,14 +82,14 @@ const handleCheckout = () => {
     </header>
     <div class="container-content">
       <aside>
-        <img loading="lazy" decoding="async" src="/public/bundling.webp" width="400px" alt="" />
+        <img loading="lazy" decoding="async" :src="data?.url_image" width="400px" alt="" />
       </aside>
       <div class="content">
-        <p class="label">{{ data.kemasan }}</p>
-        <h1 class="varian">{{ data.title }}</h1>
-        <h2 class="harga">{{ formatRupiah(data.harga) }}</h2>
+        <p class="label">{{ data?.kategori?.nama_kategori }}</p>
+        <h1 class="varian">{{ data?.nama_produk }}</h1>
+        <h2 class="harga">{{ formatRupiah(data?.harga) }}</h2>
         <p class="deskripsi">
-          {{ data.deskripsi }}
+          {{ data?.deskripsi }}
         </p>
         <div class="button-jumlah">
           <div class="kurang" @click="kurang">-</div>

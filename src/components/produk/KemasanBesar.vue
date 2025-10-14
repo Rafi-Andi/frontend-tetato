@@ -1,6 +1,5 @@
 <script setup>
 import CardProduk from '@/fragments/CardProduk.vue';
-import Pagination from '@/fragments/Pagination.vue';
 import { useProdukStore } from '@/stores/Produk';
 import { storeToRefs } from 'pinia';
 import { reactive } from 'vue';
@@ -21,7 +20,7 @@ console.log(produks.value)
     <div class="container-card">
       <CardProduk v-for="produk in produks" :key="produk.id" :img="produk.gambar" :title="produk.title" :harga=produk.harga :slug="produk.slug"/>
     </div>
-    <Pagination />
+    <!-- <Pagination /> -->
 
   </main>
 </template>
