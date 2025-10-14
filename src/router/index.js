@@ -1,6 +1,7 @@
 import Beranda from '@/pages/Beranda.vue'
 import DetailProduk from '@/pages/DetailProduk.vue'
 import KeranjangBelanja from '@/pages/KeranjangBelanja.vue'
+import Login from '@/pages/Login.vue'
 import Produk from '@/pages/Produk.vue'
 import TentangKami from '@/pages/TentangKami.vue'
 import { createRouter, createWebHistory } from 'vue-router'
@@ -38,7 +39,11 @@ const router = createRouter({
       path: '/keranjang-belanja',
       component: KeranjangBelanja,
       name: 'keranjang-belanja'
-      
+    },
+    {
+      path: '/auth/login',
+      component: Login,
+      meta: {layout: 'auth'}
     }
   ],
 })
