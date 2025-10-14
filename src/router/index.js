@@ -1,3 +1,6 @@
+import Analisis from '@/components/dashboard/Analisis.vue'
+import DashboardPesanan from '@/components/dashboard/DashboardPesanan.vue'
+import DashboardProduk from '@/components/dashboard/DashboardProduk.vue'
 import DashboardAdmin from '@/layout/DashboardAdmin.vue'
 import Beranda from '@/pages/Beranda.vue'
 import DetailProduk from '@/pages/DetailProduk.vue'
@@ -26,7 +29,7 @@ const router = createRouter({
       path: '/produk/:slug',
       component: DetailProduk,
       name: 'produk-detail',
-      meta: {layout: 'default'},
+      meta: { layout: 'default' },
       props: true,
     },
     {
@@ -38,19 +41,39 @@ const router = createRouter({
     {
       path: '/keranjang-belanja',
       component: KeranjangBelanja,
-      meta: {layout: 'blank-layout'},
-      name: 'keranjang-belanja'
+      meta: { layout: 'blank-layout' },
+      name: 'keranjang-belanja',
     },
     {
       path: '/auth/login',
       component: Login,
-      meta: {layout: 'blank-layout'}
+      meta: { layout: 'blank-layout' },
     },
     {
       path: '/dashboard',
       component: DashboardAdmin,
-      meta: {layout: 'blank-layout'}
-    }
+      meta: { layout: 'blank-layout' },
+      children: [
+        {
+          path: '',
+          name: 'dashboard',
+          component: Analisis,
+          meta: { layout: 'blank-layout' },
+        },
+        {
+          path: '/dashboard-produk',
+          name: 'dashboard-produk',
+          component: DashboardProduk,
+          meta: { layout: 'blank-layout' },
+        },
+        {
+          path: '/dashboard-pesanan',
+          name: 'dashboard-pesanan',
+          component: DashboardPesanan,
+          meta: { layout: 'blank-layout' },
+        }
+      ],
+    },
   ],
 })
 
