@@ -1,3 +1,4 @@
+import DashboardAdmin from '@/layout/DashboardAdmin.vue'
 import Beranda from '@/pages/Beranda.vue'
 import DetailProduk from '@/pages/DetailProduk.vue'
 import KeranjangBelanja from '@/pages/KeranjangBelanja.vue'
@@ -28,7 +29,6 @@ const router = createRouter({
       meta: {layout: 'default'},
       props: true,
     },
-
     {
       path: '/tentang-kami',
       component: TentangKami,
@@ -44,6 +44,11 @@ const router = createRouter({
     {
       path: '/auth/login',
       component: Login,
+      meta: {layout: 'blank-layout'}
+    },
+    {
+      path: '/dashboard',
+      component: DashboardAdmin,
       meta: {layout: 'blank-layout'}
     }
   ],
