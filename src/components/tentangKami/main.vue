@@ -36,6 +36,7 @@
 .main {
   display: flex;
   justify-content: space-around;
+  flex-wrap: wrap;
   margin-top: 130px;
 }
 
@@ -72,5 +73,60 @@ p {
 .right-container img {
   width: 350px;
   height: 350px;
+}
+
+@media (max-width: 768px) {
+  .main {
+    flex-direction: column; /* Ubah tata letak menjadi vertikal */
+    text-align: center; /* Pusatkan teks */
+    margin-top: 50px; /* Kurangi margin atas */
+  }
+
+  .left-container {
+    order: 2; /* Pindahkan konten teks ke bawah di mobile */
+    margin-top: 30px;
+  }
+
+  .right-container {
+    order: 1; /* Pindahkan gambar ke atas di mobile */
+  }
+
+  .h1 {
+    font-size: 36px; /* Kurangi ukuran font untuk H1 */
+  }
+
+  p {
+    font-size: 16px; /* Kurangi ukuran font untuk paragraf */
+  }
+
+  /* Kebutuhan untuk gambar */
+  .right-container img {
+    width: 250px; /* Ukuran gambar yang lebih kecil di mobile */
+    height: 250px;
+    margin: 0 auto; /* Pusatkan gambar */
+  }
+
+  .button button {
+    width: 100%; /* Tombol bisa full-width di mobile untuk kemudahan klik */
+    max-width: 300px; /* Batasi lebar maksimum tombol */
+  }
+}
+
+/*
+  MEDIA QUERY: Untuk layar dengan lebar maksimum 480px (Mobile sangat kecil)
+*/
+@media (max-width: 480px) {
+    .h1 {
+        font-size: 30px;
+    }
+
+    p {
+        font-size: 14px;
+    }
+
+    .right-container img {
+        width: 200px;
+        height: 200px;
+    }
 }
 </style>
