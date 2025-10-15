@@ -1,3 +1,7 @@
+import Analisis from '@/components/dashboard/Analisis.vue'
+import DashboardPesanan from '@/components/dashboard/DashboardPesanan.vue'
+import DashboardProduk from '@/components/dashboard/DashboardProduk.vue'
+import DashboardAdmin from '@/layout/DashboardAdmin.vue'
 import Beranda from '@/pages/Beranda.vue'
 import DetailProduk from '@/pages/DetailProduk.vue'
 import KeranjangBelanja from '@/pages/KeranjangBelanja.vue'
@@ -28,7 +32,6 @@ const router = createRouter({
       meta: { layout: 'default' },
       props: true,
     },
-
     {
       path: '/tentang-kami',
       component: TentangKami,
@@ -38,13 +41,39 @@ const router = createRouter({
     {
       path: '/keranjang-belanja',
       component: KeranjangBelanja,
-      name: 'keranjang-belanja'
+      meta: { layout: 'blank-layout' },
+      name: 'keranjang-belanja',
     },
     {
       path: '/auth/login',
       component: Login,
-      meta: {layout: 'auth'}
-    }
+      meta: { layout: 'blank-layout' },
+    },
+    {
+      path: '/dashboard',
+      component: DashboardAdmin,
+      meta: { layout: 'blank-layout' },
+      children: [
+        {
+          path: '',
+          name: 'dashboard',
+          component: Analisis,
+          meta: { layout: 'blank-layout' },
+        },
+        {
+          path: '/dashboard-produk',
+          name: 'dashboard-produk',
+          component: DashboardProduk,
+          meta: { layout: 'blank-layout' },
+        },
+        {
+          path: '/dashboard-pesanan',
+          name: 'dashboard-pesanan',
+          component: DashboardPesanan,
+          meta: { layout: 'blank-layout' },
+        }
+      ],
+    },
   ],
 })
 
