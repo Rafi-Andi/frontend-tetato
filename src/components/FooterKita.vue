@@ -11,7 +11,7 @@ import { Icon } from '@iconify/vue';
          <img width="100px"
           src="https://ik.imagekit.io/misxxns4p/logo.webp"
           alt="Tetato Chips Logo" />
-                <h3>Tentang kami</h3>
+                <h3></h3>
                 <p>
                     Tetato adalah camilan kentang tipis yang gurih, renyah, 
                     dan dibuat dari bahan pilihan.
