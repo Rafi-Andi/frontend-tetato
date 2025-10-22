@@ -90,4 +90,53 @@
   font-weight: 600;
   color: white;
 }
+
+@media (max-width: 768px) {
+  .content {
+    flex-direction: column; /* Ubah tata letak menjadi vertikal */
+    align-items: center;
+    gap: 0; /* Hilangkan jarak default */
+  }
+
+  .left-container, .right-container {
+      flex: 1 1 100%; /* Ambil lebar penuh */
+      max-width: 90%; /* Batasi agar ada ruang di pinggir */
+      transform: none; /* Hapus efek tumpang tindih */
+      left: auto;
+      position: relative; /* Kembali ke posisi normal */
+  }
+
+  .left-container {
+      order: 1; /* Gambar di atas */
+      margin-bottom: -50px; /* Tarik gambar ke bawah sedikit agar menempel/sedikit tumpang tindih dengan kotak teks */
+  }
+  
+  .left-container img {
+      width: 100%; /* Gambar mengisi lebar container */
+      max-width: 300px; /* Batas maksimum ukuran gambar */
+      margin: 0 auto;
+  }
+  
+  .right-container {
+      order: 2; /* Teks di bawah */
+      text-align: center; /* Pusatkan teks */
+      border-radius: 20px; /* Bulatkan semua sudut */
+      padding: 30px;
+  }
+  
+  .right-container h1 {
+      font-size: 20px;
+  }
+
+  .right-container p {
+      font-size: 14px;
+      /* Tambahkan tag <br> kembali jika perlu baris pendek untuk mobile, tapi lebih baik biarkan mengalir */
+      text-align: left; /* Teks paragraf bisa tetap rata kiri agar mudah dibaca */
+  }
+
+  .btn {
+      width: 100%;
+      max-width: 200px; /* Batas maksimum lebar tombol */
+  }
+}
 </style>
