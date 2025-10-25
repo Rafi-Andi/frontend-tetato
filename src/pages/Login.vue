@@ -1,25 +1,60 @@
-<script setup></script>
+<script setup>
+import showAlert from '@/lib/Swal'
+import router from '@/router'
+import axios from 'axios'
+import Cookies from 'js-cookie'
+import { ref } from 'vue'
+const formLogin = ref({
+  email: '',
+  password: '',
+})
+
+const isLoading = ref(false)
+const message = ref('')
+const isError = ref(false)
+const messageValidasi = ref([])
+
+const handleLogin = async () => {
+  try {
+    isLoading.value = true
+    const response = await axios.post('http://127.0.0.1:8000/api/login', formLogin.value)
+    console.log(response)
+    message.value = response.data.message
+
+    Cookies.set('token', response.data.token)
+    showAlert('Sukses', message.value, 'success')
+    router.push({name: 'dashboard'})
+  } catch (error) {
+    isError.value = true
+    message.value = error.response.data.message
+    messageValidasi.value = error.response.data.errors
+    showAlert('Error', message.value, 'error')
+  } finally {
+    isLoading.value = false
+  }
+}
+</script>
 
 <template>
-
-    <div class="login-container">
-       
-        <div class="login-image">
-            <img src="https://ik.imagekit.io/misxxns4p/banner/loginfoto.png" alt="Login image">
-        </div>
-
-        <div class="login-form">
-            <h2>Login Admin</h2>
-            <p>Untuk mengakses dashboard silahkan login</p>
-            <form>
-                <label for="email" class="semibold">Email</label>
-                <input type="email" id="email" name="email" required>
-                <label for="password" class="semibold">Password</label>
-                <input type="password" id="password" name="password" required>
-                <button type="submit">Sign Up</button>
-            </form>
+  <div class="login-container">
+    <div class="login-image">
+      <img src="https://ik.imagekit.io/misxxns4p/banner/loginfoto.png" alt="Login image" />
     </div>
+
+    <div class="login-form">
+      <h2>Login Admin</h2>
+      <p>Untuk mengakses dashboard silahkan login</p>
+      <form @submit.prevent="handleLogin">
+        <label for="email" class="semibold">Email</label>
+        <input v-model="formLogin.email" type="email" id="email" name="email" required/>
+        <p v-if="messageValidasi?.email" style="color: red;">{{ messageValidasi?.email[0] }}</p>
+        <label for="password" class="semibold">Password</label>
+        <input v-model="formLogin.password" type="password" id="password" name="password" required/>
+        <p v-if="messageValidasi?.password" style="color: red;">{{ messageValidasi?.password[0] }}</p>
+        <button type="submit"><span>{{ isLoading ? "Loading.." : "Login" }}</span></button>
+      </form>
     </div>
+  </div>
 </template>
 
 <style scoped>
@@ -30,7 +65,7 @@
 }
 
 body {
-  font-family: "Poppins", sans-serif;
+  font-family: 'Poppins', sans-serif;
   background-color: #fff;
   display: flex;
   justify-content: center;
@@ -38,16 +73,13 @@ body {
   height: 100vh;
 }
 
-
 .login-container {
   display: flex;
   width: 80%;
   max-width: 1000px;
-  
-  overflow: hidden;
-  
-}
 
+  overflow: hidden;
+}
 
 .login-image {
   flex: 1;
@@ -63,7 +95,6 @@ body {
   border-top-right-radius: 40px;
   border-bottom-right-radius: 40px;
 }
-
 
 .login-form {
   flex: 1;
@@ -84,7 +115,6 @@ body {
   color: #777;
   margin-bottom: 30px;
 }
-
 
 form {
   display: flex;
@@ -121,7 +151,6 @@ button:hover {
   background-color: #e2b607;
 }
 
-
 @media (max-width: 768px) {
   .login-container {
     flex-direction: column;
@@ -135,5 +164,4 @@ button:hover {
     padding: 30px;
   }
 }
-
- </style>
+</style>

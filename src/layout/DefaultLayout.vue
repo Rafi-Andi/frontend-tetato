@@ -12,4 +12,5 @@ import Navbar from '@/components/Navbar.vue'
   <FooterKita />
 </template>
 
-<style scoped></style>
+<style scoped>
+</style>

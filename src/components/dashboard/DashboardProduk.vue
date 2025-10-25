@@ -1,34 +1,180 @@
 <script setup>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { Icon } from '@iconify/vue'
+import axios from 'axios'
+import { formatRupiah } from '@/lib/FormatRupiah'
+import showAlert from '@/lib/Swal'
+import Cookies from 'js-cookie'
+import router from '@/router'
 
 const produkBaru = ref({
-  varian: '',
-  kemasan: '',
+  kategori_id: '',
+  nama_produk: '',
   harga: '',
-  gambar: null, 
-  preview: null, 
+  file_path: null,
+  deskripsi: '',
 })
 
-const daftarProduk = ref([
-  {
-    id: 1,
-    gambar: 'https://ik.imagekit.io/misxxns4p/tetato.webp',
-    varian: 'Tetato Chips Original',
-    kemasan: '65 Gram',
-    harga: 15000,
-  },
-  {
-    id: 2,
-    gambar: 'https://ik.imagekit.io/misxxns4p/tetato.webp',
-    varian: 'Tetato Chips Original',
-    kemasan: '65 Gram',
-    harga: 15000,
-  },
-])
+const token = Cookies.get('token')
+
+if(!token) {
+  router.push({name: 'login'})
+}
+const daftarProduk = ref([])
+
+const produks = ref(null)
+const totalPages = ref(0)
+const currentPage = ref(1)
+
+const fetchProduks = async (page = 1, kategori = '') => {
+  if (!kategori) {
+    const response = await axios.get(`http://127.0.0.1:8000/api/produk?page=${page}`)
+    console.log('data :', response.data)
+    const data = response.data.data
+    produks.value = data.data
+
+    currentPage.value = data.current_page
+
+    totalPages.value = data.last_page
+  } else {
+    const response = await axios.get(
+      `http://127.0.0.1:8000/api/produk?page=${page}&kategori=${kategori}`,
+    )
+    console.log('data :', response.data)
+    const data = response.data.data
+    produks.value = data.data
+
+    currentPage.value = data.current_page
+
+    totalPages.value = data.last_page
+  }
+}
+
+const tambahProduk = async () => {
+  try {
+    if (editId.value) {
+      console.log('ini edit')
+      const formData = new FormData()
+      formData.append('kategori_id', produkBaru.value.kategori_id)
+      formData.append('nama_produk', produkBaru.value.nama_produk)
+      formData.append('harga', produkBaru.value.harga)
+      formData.append('deskripsi', produkBaru.value.deskripsi)
+      formData.append('file_path', produkBaru.value.file_path)
+
+      const response = await axios.post(
+        `http://127.0.0.1:8000/api/produk/${editId.value}`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      )
+
+      showAlert(response.data.message, 'Produk Berhasil di Edit', 'success')
+      console.log(response.data)
+      produkBaru.value.nama_produk = ''
+      produkBaru.value.deskripsi = ''
+      produkBaru.value.harga = ''
+      produkBaru.value.kategori_id = ''
+      produkBaru.value.file_path = ''
+      editId.value = null
+    } else {
+      const formData = new FormData()
+      formData.append('kategori_id', produkBaru.value.kategori_id)
+      formData.append('nama_produk', produkBaru.value.nama_produk)
+      formData.append('harga', produkBaru.value.harga)
+      formData.append('deskripsi', produkBaru.value.deskripsi)
+      formData.append('file_path', produkBaru.value.file_path)
+
+      const response = await axios.post('http://127.0.0.1:8000/api/produk', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: 'Bearer 1|0sZqeLnK0txIokujN6sTMVGgCwLaAzKVooYvNjuu087acf03',
+        },
+      })
+
+      showAlert(response.data.message, 'Produk Berhasil ditambahkan ke daftar produk', 'success')
+      console.log(response.data)
+
+      produkBaru.value.nama_produk = ''
+      produkBaru.value.deskripsi = ''
+      produkBaru.value.harga = ''
+      produkBaru.value.kategori_id = ''
+      produkBaru.value.file_path = ''
+      editId.value = null
+    }
+  } catch (error) {
+    console.log('Error upload:', error.response)
+    showAlert(
+      'Gagal menambahkan produk',
+      error.response?.data?.message || 'Terjadi kesalahan',
+      'error',
+    )
+    const message = error.response.data.message
+    if (message === 'Authenticated.') {
+      router.push({ name: 'login' })
+    }
+  }
+}
+
+const editId = ref(0)
+
+const buttonEdit = (id, nama_produk, deskripsi, harga, kategori_id, file_path) => {
+  editId.value = id
+  produkBaru.value.nama_produk = nama_produk
+  produkBaru.value.deskripsi = deskripsi
+  produkBaru.value.harga = harga
+  produkBaru.value.kategori_id = kategori_id
+  produkBaru.value.file_path = file_path
+}
+
+const buttonCancel = () => {
+  editId.value = null
+  produkBaru.value.nama_produk = ''
+  produkBaru.value.deskripsi = ''
+  produkBaru.value.harga = ''
+  produkBaru.value.kategori_id = ''
+  produkBaru.value.file_path = ''
+}
+
+const hapusProduk = async (id) => {
+  try {
+    const response = await axios.delete(`http://127.0.0.1:8000/api/produk/${id}`, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: 'Bearer 1|0sZqeLnK0txIokujN6sTMVGgCwLaAzKVooYvNjuu087acf03',
+      },
+    })
+
+    showAlert('Berhasil Hapus', response.data.message, 'success')
+    fetchProduks()
+  } catch (error) {
+    console.log(error)
+    showAlert('Gagal Hapus', error.response.data.message, 'error')
+  }
+}
+
+const daftarKategori = ref(null)
+
+const fetchKategori = async () => {
+  const response = await axios.get(`http://127.0.0.1:8000/api/kategori`)
+  console.log('kategori :', response)
+  const data = response.data.data.data
+  console.log(data)
+
+  daftarKategori.value = data
+}
+
+onMounted(() => {
+  fetchKategori()
+  fetchProduks()
+})
 
 const handleFileChange = (event) => {
   const file = event.target.files[0]
+  produkBaru.value.file_path = file
   if (file) {
     produkBaru.value.gambar = file
     const reader = new FileReader()
@@ -37,24 +183,6 @@ const handleFileChange = (event) => {
     }
     reader.readAsDataURL(file)
   }
-}
-
-const tambahProduk = () => {
-  if (!produkBaru.value.varian || !produkBaru.value.kemasan || !produkBaru.value.harga) return
-
-  daftarProduk.value.push({
-    id: Date.now(),
-    varian: produkBaru.value.varian,
-    kemasan: produkBaru.value.kemasan,
-    harga: produkBaru.value.harga,
-    gambar: produkBaru.value.preview || 'https://ik.imagekit.io/misxxns4p/tetato.webp',
-  })
-
-  produkBaru.value = { varian: '', kemasan: '', harga: '', gambar: null, preview: null }
-}
-
-const hapusProduk = (id) => {
-  daftarProduk.value = daftarProduk.value.filter((p) => p.id !== id)
 }
 </script>
 
@@ -68,7 +196,19 @@ const hapusProduk = (id) => {
         <div class="form-inputs">
           <div class="input-group">
             <label>Varian Produk</label>
-            <input type="text" v-model="produkBaru.varian" placeholder="Tetato chips sambalado" />
+            <input
+              type="text"
+              v-model="produkBaru.nama_produk"
+              placeholder="Tetato chips sambalado"
+            />
+          </div>
+          <div class="input-group">
+            <label>Deskripsi</label>
+            <input
+              type="text"
+              v-model="produkBaru.deskripsi"
+              placeholder="Tetato chips rasa yang enak dan gurih"
+            />
           </div>
           <div class="input-group">
             <label>Harga</label>
@@ -76,9 +216,11 @@ const hapusProduk = (id) => {
           </div>
           <div class="input-group">
             <label>Kategori</label>
-            <select name="kategori" id="kategori">
+            <select v-model="produkBaru.kategori_id" name="kategori" id="kategori">
               <option value="">Pilih Kategori</option>
-              <option value="">Kategori 1</option>
+              <option v-if="daftarKategori?.length > 0" v-for="(kategori, index) in daftarKategori" :key="index" :value="kategori.id">
+                {{ kategori.nama_kategori }}
+              </option>
             </select>
           </div>
         </div>
@@ -90,19 +232,24 @@ const hapusProduk = (id) => {
               <Icon icon="mdi:plus" width="50" height="50" color="#D6B000" />
             </div>
 
-            <img v-if="produkBaru.preview" :src="produkBaru.preview" alt="Preview Gambar" class="preview-img" />
-
-            <input
-              type="file"
-              accept="image/*"
-              class="browse-btn"
-              @change="handleFileChange"
+            <img
+              v-if="produkBaru.preview"
+              :src="produkBaru.preview"
+              alt="Preview Gambar"
+              class="preview-img"
             />
+
+            <input type="file" accept="image/*" class="browse-btn" @change="handleFileChange" />
           </div>
         </div>
       </div>
 
-      <button class="btn-tambah" @click="tambahProduk">Tambah Produk</button>
+      <button v-if="editId" class="btn-tambah" style="background-color: red" @click="buttonCancel">
+        Batalkan Edit
+      </button>
+      <button class="btn-tambah" @click="tambahProduk">
+        <span v-if="editId">Edit Produk</span> <span v-else>Tambah Produk</span>
+      </button>
     </div>
 
     <div class="tabel-produk">
@@ -117,22 +264,61 @@ const hapusProduk = (id) => {
           </tr>
         </thead>
         <tbody>
-          <tr v-for="p in daftarProduk" :key="p.id">
-            <td><img :src="p.gambar" alt="" /></td>
-            <td>{{ p.varian }}</td>
-            <td>{{ p.kemasan }}</td>
-            <td>Rp {{ p.harga.toLocaleString('id-ID') }}</td>
+          <tr v-if="produks?.length > 0" v-for="produk in produks" :key="produk?.id">
+            <td><img :src="produk.url_image" alt="" /></td>
+            <td>{{ produk.nama_produk }}</td>
+            <td>{{ produk.kategori.nama_kategori }}</td>
+            <td>{{ formatRupiah(produk.harga) }}</td>
             <td class="action">
-              <button class="edit-btn">
+              <button
+                class="edit-btn"
+                @click="
+                  buttonEdit(
+                    produk.id,
+                    produk.nama_produk,
+                    produk.deskripsi,
+                    produk.harga,
+                    produk.kategori.kategori_id,
+                    produk.url_image,
+                  )
+                "
+              >
                 <Icon icon="lucide:edit" width="20" height="20" />
               </button>
-              <button class="delete-btn" @click="hapusProduk(p.id)">
+              <button class="delete-btn" @click="hapusProduk(produk.id)">
                 <Icon icon="lucide:trash-2" width="20" height="20" />
               </button>
             </td>
           </tr>
+          <h1 v-else>Tidak ada data produk</h1>
         </tbody>
       </table>
+      <div class="container-paginate" v-if="produks?.length > 0">
+        <button
+          :disabled="currentPage === 1"
+          class="page button"
+          @click="fetchProduks(currentPage - 1, kategoriAktif)"
+        >
+          <p><</p>
+        </button>
+
+        <div
+          v-for="i in totalPages"
+          :key="i"
+          :class="['page', i === currentPage ? 'active' : 'inactive']"
+          @click="fetchProduks(i, kategoriAktif)"
+        >
+          <p>{{ i }}</p>
+        </div>
+
+        <button
+          :disabled="currentPage === totalPages"
+          class="page button"
+          @click="fetchProduks(currentPage + 1, kategoriAktif)"
+        >
+          <p>></p>
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -191,7 +377,8 @@ const hapusProduk = (id) => {
   color: #333;
 }
 
-.input-group input, select {
+.input-group input,
+select {
   background-color: #f9f8ee;
   border: 1px solid #ccc;
   border-radius: 6px;
@@ -314,5 +501,43 @@ td img {
 
 .delete-btn:hover {
   color: #d9534f;
+}
+
+.container-paginate {
+  display: flex;
+  justify-content: center;
+  margin: auto;
+  gap: 1rem;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.page {
+  background-color: antiquewhite;
+  padding: 5px 15px;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.page:hover {
+  transform: scale(1.1);
+}
+
+.page.button {
+  background-color: #fee2bc;
+  color: #d4a300;
+  border: none;
+}
+
+.page.active {
+  color: white;
+  background-color: #d4a300;
+}
+
+.page.inactive {
+  background-color: white;
+  color: #d4a300;
+  border: 1px solid #d4a300;
 }
 </style>

@@ -1,11 +1,103 @@
+<script setup>
+import { formatRupiah } from '@/lib/FormatRupiah'
+import { formatTanggalIndonesia } from '@/lib/FormatTanggal'
+import axios from 'axios'
+import { ref, onMounted, watch } from 'vue'
+import debounce from 'lodash.debounce'
+import Cookies from 'js-cookie'
+import router from '@/router'
+
+const search = ref('')
+const date = ref('')
+const currentPage = ref(1)
+const totalPages = ref(0)
+
+const dataPesanans = ref([])
+const statusRef = ref('')
+
+const loading = ref(false)
+
+const token = Cookies.get('token')
+
+if(!token){
+  router.push({name: 'login'})
+}
+
+const fetchPesanans = async (page = 1) => {
+  try {
+    loading.value = true
+    const url = `http://127.0.0.1:8000/api/pesanan?page=${page}&status=${statusRef.value}&search=${search.value}&date=${date.value}`
+
+    console.log('Fetching:', url)
+
+    const response = await axios.get(url, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+
+    const data = response.data.data
+
+    currentPage.value = data.current_page
+    totalPages.value = data.last_page
+    dataPesanans.value = data.data
+  } catch (error) {
+    console.error('Error fetching data:', error)
+  } finally {
+    loading.value = false
+  }
+}
+
+watch(statusRef, (newStatus) => {
+  currentPage.value = 1
+  fetchPesanans(1)
+})
+
+watch(
+  search,
+  debounce(async (newSearch) => {
+    currentPage.value = 1
+    fetchPesanans(1)
+  }, 500),
+)
+
+watch(date, (newDate) => {
+  currentPage.value = 1
+  fetchPesanans(1)
+})
+
+watch(currentPage, (newPage) => {
+  fetchPesanans(newPage)
+})
+
+const prevButton = () => {
+  if (currentPage.value > 1) {
+    currentPage.value--
+  }
+}
+const nextButton = () => {
+  if (currentPage.value < totalPages.value) {
+    currentPage.value++
+  }
+}
+
+onMounted(() => {
+  fetchPesanans()
+})
+</script>
+
 <template>
   <div class="container">
     <h2 class="title">Data Produk</h2>
 
     <div class="tabs">
-      <button :class="{ active: tab === 'all' }" @click="tab = 'all'">All Orders</button>
-      <button :class="{ active: tab === 'proses' }" @click="tab = 'proses'">Proses</button>
-      <button :class="{ active: tab === 'selesai' }" @click="tab = 'selesai'">Selesai</button>
+      <button :class="{ active: statusRef === '' }" @click="statusRef = ''">All Orders</button>
+      <button :class="{ active: statusRef === 'proses' }" @click="statusRef = 'proses'">
+        Proses
+      </button>
+      <button :class="{ active: statusRef === 'selesai' }" @click="statusRef = 'selesai'">
+        Selesai
+      </button>
     </div>
 
     <div class="filters">
@@ -25,64 +117,54 @@
         </tr>
       </thead>
       <tbody>
-        <tr
-          v-for="order in filteredOrders"
-          :key="order.id"
-        >
-          <td>#{{ order.id }}</td>
-          <td>{{ order.customer }}</td>
-          <td>{{ order.tanggal }}</td>
-          <td>Rp {{ order.total.toLocaleString('id-ID') }}</td>
+        <tr v-if="loading">
+          <td colspan="6" style="text-align: center; color: #999; font-style: italic">
+            Loading...
+          </td>
+        </tr>
+
+        <tr v-else-if="dataPesanans.length < 1">
+          <td colspan="6" style="text-align: center; color: #999; font-style: italic">
+            Tidak ada data pesanan yang ditemukan.
+          </td>
+        </tr>
+
+        <tr v-else v-for="pesanan in dataPesanans" :key="pesanan.id">
+          <td>#{{ pesanan.kode_pesanan }}</td>
+          <td>{{ pesanan.nama_pelanggan }}</td>
+          <td>{{ formatTanggalIndonesia(pesanan.created_at) }}</td>
+          <td>{{ formatRupiah(pesanan.total_harga) }}</td>
           <td>
-            <span
-              class="status"
-              :class="order.status === 'Proses' ? 'status-proses' : 'status-selesai'"
-            >
-              {{ order.status }}
+            <span class="status" :class="pesanan.status">
+              {{ pesanan.status }}
             </span>
           </td>
           <td>
-            <button class="btn-detail">Detail</button>
+            <router-link
+              :to="{ name: 'detail-pesanan', params: { id: pesanan.id } }"
+              class="btn-detail"
+            >
+              Detail
+            </router-link>
           </td>
         </tr>
       </tbody>
     </table>
 
     <div class="pagination">
-      <button v-for="n in 6" :key="n" :class="{ active: n === currentPage }" @click="currentPage = n">
+      <button style="background-color: #fee2bc; color: #d4a300" @click="prevButton"><</button>
+      <button
+        v-for="n in totalPages"
+        :key="n"
+        :class="{ active: n === currentPage }"
+        @click="currentPage = n"
+      >
         {{ n }}
       </button>
+      <button style="background-color: #fee2bc; color: #d4a300" @click="nextButton">></button>
     </div>
   </div>
 </template>
-
-<script setup>
-import { ref, computed } from "vue";
-
-const tab = ref("all");
-const search = ref("");
-const date = ref("");
-const currentPage = ref(1);
-
-const orders = ref([
-  { id: "001", customer: "Rafi Andi Prayitno", tanggal: "31-09-2025", total: 15000, status: "Proses" },
-  { id: "002", customer: "Rifqi Maulana", tanggal: "01-10-2025", total: 20000, status: "Selesai" },
-]);
-
-const filteredOrders = computed(() => {
-  let data = orders.value;
-
-  if (tab.value !== "all") data = data.filter(o => o.status.toLowerCase() === tab.value);
-
-  if (search.value)
-    data = data.filter(o =>
-      o.customer.toLowerCase().includes(search.value.toLowerCase()) ||
-      o.id.includes(search.value)
-    );
-
-  return data;
-});
-</script>
 
 <style>
 body {
@@ -164,12 +246,16 @@ body {
   font-size: 14px;
 }
 
-.status-proses {
-  background-color: #f7b500;
+.status.baru {
+  background-color: #e2b810;
 }
 
-.status-selesai {
-  background-color: #43a047;
+.status.proses {
+  background-color: #3b82f6;
+}
+
+.status.selesai {
+  background-color: #22c55e;
 }
 
 .btn-detail {

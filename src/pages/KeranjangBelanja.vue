@@ -100,7 +100,6 @@ const handleCheckout = async () => {
           <tbody>
             <tr v-for="(item, index) in produks" :key="index">
               <td class="produk">
-                {{ item.id }}
                 <div @click="handlerHapus(index)" class="button-delete">X</div>
                 <aside>
                   <img :src="item.gambar" width="100px" alt="" />

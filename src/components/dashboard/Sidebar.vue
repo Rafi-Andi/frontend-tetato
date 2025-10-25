@@ -35,6 +35,15 @@ const emit = defineEmits(['close-sidebar'])
         <Icon icon="lucide:package" class="w-5 h-5" color="#716F6F" width="25px" />
         <h3>Produk</h3>
       </router-link>
+      <router-link
+        :to="{ name: 'dashboard-kategori' }"
+        class="menu"
+        :class="{ active: $route.name === 'dashboard-kategori' }"
+        style="text-decoration: none"
+      >
+        <Icon icon="lucide:package" class="w-5 h-5" color="#716F6F" width="25px" />
+        <h3>Kategori</h3>
+      </router-link>
 
       <router-link
         :to="{ name: 'dashboard-pesanan' }"

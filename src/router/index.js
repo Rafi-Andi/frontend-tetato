@@ -1,6 +1,8 @@
 import Analisis from '@/components/dashboard/Analisis.vue'
+import DashboardKategori from '@/components/dashboard/DashboardKategori.vue'
 import DashboardPesanan from '@/components/dashboard/DashboardPesanan.vue'
 import DashboardProduk from '@/components/dashboard/DashboardProduk.vue'
+import DetailPesanan from '@/components/dashboard/DetailPesanan.vue'
 import DashboardAdmin from '@/layout/DashboardAdmin.vue'
 import Beranda from '@/pages/Beranda.vue'
 import DetailProduk from '@/pages/DetailProduk.vue'
@@ -46,6 +48,7 @@ const router = createRouter({
     },
     {
       path: '/auth/login',
+      name: 'login',
       component: Login,
       meta: { layout: 'blank-layout' },
     },
@@ -67,9 +70,21 @@ const router = createRouter({
           meta: { layout: 'blank-layout' },
         },
         {
+          path: '/dashboard-kategori',
+          name: 'dashboard-kategori',
+          component: DashboardKategori,
+          meta: { layout: 'blank-layout' },
+        },
+        {
           path: '/dashboard-pesanan',
           name: 'dashboard-pesanan',
           component: DashboardPesanan,
+          meta: { layout: 'blank-layout' },
+        },
+        {
+          path: '/detail-pesanan/:id',
+          name: 'detail-pesanan',
+          component: DetailPesanan,
           meta: { layout: 'blank-layout' },
         }
       ],
