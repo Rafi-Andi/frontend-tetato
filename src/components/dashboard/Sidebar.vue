@@ -41,7 +41,7 @@ const emit = defineEmits(['close-sidebar'])
         :class="{ active: $route.name === 'dashboard-kategori' }"
         style="text-decoration: none"
       >
-        <Icon icon="lucide:package" class="w-5 h-5" color="#716F6F" width="25px" />
+        <Icon icon="lucide:tags" class="w-5 h-5" color="#716F6F" width="25px" />
         <h3>Kategori</h3>
       </router-link>
 
@@ -66,6 +66,11 @@ const emit = defineEmits(['close-sidebar'])
 </template>
 
 <style scoped>
+.menu:hover {
+  background-color: #f7e8b8;
+  border-radius: 10px;
+}
+
 .menu.active {
   background-color: #f7e8b8;
   border-radius: 10px;

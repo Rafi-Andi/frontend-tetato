@@ -20,16 +20,25 @@ if (!token) {
 const categories = ref(null)
 const totalPages = ref(0)
 const currentPage = ref(1)
+const isLoading = ref(false)
 
 const fetchKategori = async (page = 1) => {
-    const response = await axios.get(`http://127.0.0.1:8000/api/kategori?page=${page}`)
-    console.log('data :', response.data)
-    const data = response.data.data
-    categories.value = data.data
-    
-    currentPage.value = data.current_page
-    
-    totalPages.value = data.last_page
+    try {
+        isLoading.value = true
+        const response = await axios.get(`http://127.0.0.1:8000/api/kategori?page=${page}`)
+        console.log('data :', response.data)
+        const data = response.data.data
+        categories.value = data.data
+        
+        currentPage.value = data.current_page
+        
+        totalPages.value = data.last_page
+        
+    } catch (error) {
+        console.log(error)
+    }finally{
+        isLoading.value = false
+    }
 }
 
 const editId = ref(0)
@@ -132,9 +141,8 @@ onMounted(() => {
             <th>Aksi</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody v-if="categories?.length > 0">
           <tr
-            v-if="categories?.length > 0"
             v-for="(category, index) in categories"
             :key="index"
           >
@@ -154,8 +162,9 @@ onMounted(() => {
               </button>
             </td>
           </tr>
-          <h1 v-else>Tidak ada data produk</h1>
         </tbody>
+        <h1 style="text-align: center; margin-top: 10px;" v-else-if="isLoading">Memuat Data..</h1>
+        <h1 style="text-align: center; margin-top: 10px;" v-else>Tidak ada data produk</h1>
       </table>
       <div class="container-paginate" v-if="categories?.length > 0">
         <button
