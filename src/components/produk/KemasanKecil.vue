@@ -40,7 +40,7 @@ const fetchProduks = async (page = 1, kategori = '') => {
 }
 
 const fetchKategori = async () => {
-  const response = await axios.get(`http://127.0.0.1:8000/api/kategori`)
+  const response = await axios.get(`http://127.0.0.1:8000/api/kategori/all`)
   console.log('kategori :', response)
   const data = response.data.data
   console.log(data)
