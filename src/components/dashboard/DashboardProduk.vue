@@ -12,13 +12,14 @@ const produkBaru = ref({
   nama_produk: '',
   harga: '',
   file_path: null,
+  preview: null,
   deskripsi: '',
 })
 
 const token = Cookies.get('token')
 
-if(!token) {
-  router.push({name: 'login'})
+if (!token) {
+  router.push({ name: 'login' })
 }
 const daftarProduk = ref([])
 
@@ -26,28 +27,15 @@ const produks = ref(null)
 const totalPages = ref(0)
 const currentPage = ref(1)
 
-const fetchProduks = async (page = 1, kategori = '') => {
-  if (!kategori) {
-    const response = await axios.get(`http://127.0.0.1:8000/api/produk?page=${page}`)
-    console.log('data :', response.data)
-    const data = response.data.data
-    produks.value = data.data
+const fetchProduks = async (page = 1) => {
+  const response = await axios.get(`http://127.0.0.1:8000/api/produk?page=${page}`)
+  console.log('data :', response.data)
+  const data = response.data.data
+  produks.value = data.data
 
-    currentPage.value = data.current_page
+  currentPage.value = data.current_page
 
-    totalPages.value = data.last_page
-  } else {
-    const response = await axios.get(
-      `http://127.0.0.1:8000/api/produk?page=${page}&kategori=${kategori}`,
-    )
-    console.log('data :', response.data)
-    const data = response.data.data
-    produks.value = data.data
-
-    currentPage.value = data.current_page
-
-    totalPages.value = data.last_page
-  }
+  totalPages.value = data.last_page
 }
 
 const tambahProduk = async () => {
@@ -55,12 +43,14 @@ const tambahProduk = async () => {
     if (editId.value) {
       console.log('ini edit')
       const formData = new FormData()
+      formData.append('_method', 'PUT')
       formData.append('kategori_id', produkBaru.value.kategori_id)
       formData.append('nama_produk', produkBaru.value.nama_produk)
       formData.append('harga', produkBaru.value.harga)
       formData.append('deskripsi', produkBaru.value.deskripsi)
-      formData.append('file_path', produkBaru.value.file_path)
-
+      if (produkBaru.value.file_path) {
+        formData.append('file_path', produkBaru.value.file_path)
+      }
       const response = await axios.post(
         `http://127.0.0.1:8000/api/produk/${editId.value}`,
         formData,
@@ -79,7 +69,9 @@ const tambahProduk = async () => {
       produkBaru.value.harga = ''
       produkBaru.value.kategori_id = ''
       produkBaru.value.file_path = ''
+      produkBaru.value.preview = ''
       editId.value = null
+      fetchProduks(currentPage.value)
     } else {
       const formData = new FormData()
       formData.append('kategori_id', produkBaru.value.kategori_id)
@@ -103,7 +95,10 @@ const tambahProduk = async () => {
       produkBaru.value.harga = ''
       produkBaru.value.kategori_id = ''
       produkBaru.value.file_path = ''
+      produkBaru.value.preview = ''
+
       editId.value = null
+      fetchProduks(currentPage.value)
     }
   } catch (error) {
     console.log('Error upload:', error.response)
@@ -121,13 +116,15 @@ const tambahProduk = async () => {
 
 const editId = ref(0)
 
-const buttonEdit = (id, nama_produk, deskripsi, harga, kategori_id, file_path) => {
+const buttonEdit = (id, nama_produk, deskripsi, harga, kategori_id, preview_image) => {
   editId.value = id
   produkBaru.value.nama_produk = nama_produk
   produkBaru.value.deskripsi = deskripsi
   produkBaru.value.harga = harga
   produkBaru.value.kategori_id = kategori_id
-  produkBaru.value.file_path = file_path
+  produkBaru.value.preview = preview_image
+  produkBaru.value.file_path = null
+  console.log(produkBaru.value)
 }
 
 const buttonCancel = () => {
@@ -137,6 +134,7 @@ const buttonCancel = () => {
   produkBaru.value.harga = ''
   produkBaru.value.kategori_id = ''
   produkBaru.value.file_path = ''
+  produkBaru.value.preview = ''
 }
 
 const hapusProduk = async (id) => {
@@ -149,7 +147,7 @@ const hapusProduk = async (id) => {
     })
 
     showAlert('Berhasil Hapus', response.data.message, 'success')
-    fetchProduks()
+    fetchProduks(currentPage.value)
   } catch (error) {
     console.log(error)
     showAlert('Gagal Hapus', error.response.data.message, 'error')
@@ -159,19 +157,13 @@ const hapusProduk = async (id) => {
 const daftarKategori = ref(null)
 
 const fetchKategori = async () => {
-  const response = await axios.get(`http://127.0.0.1:8000/api/kategori`)
+  const response = await axios.get(`http://127.0.0.1:8000/api/kategori/all`)
   console.log('kategori :', response)
-  const data = response.data.data.data
+  const data = response.data.data
   console.log(data)
 
   daftarKategori.value = data
 }
-
-onMounted(() => {
-  fetchKategori()
-  fetchProduks()
-})
-
 const handleFileChange = (event) => {
   const file = event.target.files[0]
   produkBaru.value.file_path = file
@@ -183,7 +175,14 @@ const handleFileChange = (event) => {
     }
     reader.readAsDataURL(file)
   }
+
+  console.log(produkBaru.value)
 }
+
+onMounted(() => {
+  fetchKategori()
+  fetchProduks()
+})
 </script>
 
 <template>
@@ -218,7 +217,12 @@ const handleFileChange = (event) => {
             <label>Kategori</label>
             <select v-model="produkBaru.kategori_id" name="kategori" id="kategori">
               <option value="">Pilih Kategori</option>
-              <option v-if="daftarKategori?.length > 0" v-for="(kategori, index) in daftarKategori" :key="index" :value="kategori.id">
+              <option
+                v-if="daftarKategori?.length > 0"
+                v-for="(kategori, index) in daftarKategori"
+                :key="index"
+                :value="kategori.id"
+              >
                 {{ kategori.nama_kategori }}
               </option>
             </select>
@@ -278,7 +282,7 @@ const handleFileChange = (event) => {
                     produk.nama_produk,
                     produk.deskripsi,
                     produk.harga,
-                    produk.kategori.kategori_id,
+                    produk.kategori_id,
                     produk.url_image,
                   )
                 "

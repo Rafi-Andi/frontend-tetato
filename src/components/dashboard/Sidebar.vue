@@ -1,5 +1,8 @@
 <script setup>
 import { Icon } from '@iconify/vue'
+import axios from 'axios'
+import Cookies from 'js-cookie'
+import router from '@/router'
 const props = defineProps({
   isOpen: {
     type: Boolean,
@@ -8,6 +11,26 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['close-sidebar'])
+const token = Cookies.get('token')
+const logout = async () => {
+  try {
+    await axios.post(
+      'http://localhost:8000/api/logout',
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    )
+
+    Cookies.remove('token')
+
+    router.push({ name: 'login' })
+  } catch (error) {
+    console.error('Gagal logout:', error)
+  }
+}
 </script>
 
 <template>
@@ -58,7 +81,7 @@ const emit = defineEmits(['close-sidebar'])
     <hr
       style="margin-top: 30px; height: 3px; width: 100%; background-color: #716f67; color: #716f67"
     />
-    <div class="menu" style="padding: 20px">
+    <div class="menu" style="padding: 20px; cursor: pointer;" @click="logout">
       <Icon icon="lucide:log-out" class="w-5 h-5" color="#716F6F" width="25px" />
       <h3>Logout</h3>
     </div>

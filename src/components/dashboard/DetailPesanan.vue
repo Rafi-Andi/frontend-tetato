@@ -22,8 +22,8 @@ const loading = ref(false)
 
 const token = Cookies.get('token')
 
-if(!token){
- router.push({name: 'login'})
+if (!token) {
+  router.push({ name: 'login' })
 }
 
 const pesananFetch = async () => {
@@ -77,9 +77,8 @@ const updateStatus = async () => {
   }
 }
 
-const ongkosKirim = ref(0) 
+const ongkosKirim = ref(0)
 const loadingDownload = ref(false)
-
 
 const downloadInvoice = async () => {
   if (!pesanan.value) return
@@ -133,7 +132,7 @@ onMounted(() => {
 })
 </script>
 
-<template>
+<!-- <template>
   <div v-if="loading" class="loading">
     <p>Loading pesanan...</p>
   </div>
@@ -200,6 +199,77 @@ onMounted(() => {
       </div>
     </div>
   </div>
+</template> -->
+
+<template>
+  <div v-if="loading" class="loading">
+    <p>Loading pesanan...</p>
+  </div>
+  <div v-else class="detail-pesanan">
+    <h1>Detail Pesanan</h1>
+
+    <div class="info-pesanan">
+      <p><strong>Nomor Pesanan:</strong> {{ pesanan?.id }}</p>
+      <p><strong>Tanggal:</strong> {{ formatTanggalIndonesia(pesanan?.created_at) }}</p>
+      <p><strong>Status:</strong> {{ pesanan?.status }}</p>
+      <p><strong>Total:</strong> {{ formatRupiah(pesanan?.total_harga) }}</p>
+    </div>
+
+    <table class="tabel-produk">
+      <thead>
+        <tr>
+          <th>Produk</th>
+          <th>Harga</th>
+          <th>Jumlah</th>
+          <th>Subtotal</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="item in pesanan?.pesanan_details" :key="item.id">
+          <td>{{ item.nama_produk }}</td>
+          <td>{{ formatRupiah(item.harga) }}</td>
+          <td>{{ item.jumlah }}</td>
+          <td>{{ formatRupiah(item.subtotal) }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="action-panel-wrapper">
+      <div class="action-card status-card">
+        <h3>Perbarui Status</h3>
+        <div class="input-group">
+          <label for="status-select">Pilih Status Baru:</label>
+          <select  class="form-input" v-model="status">
+            <option :value="status">{{ status }}</option>
+            <option v-for="status in opsiLain" :key="status" :value="status">
+              {{ status }}
+            </option>
+          </select>
+        </div>
+        <button @click="updateStatus" class="btn btn-save" :disabled="loadingUpdate">
+          <span v-if="loadingUpdate">Menyimpan...</span><span v-else>Simpan Perubahan Status</span>
+        </button>
+      </div>
+
+      <div class="action-card invoice-card">
+        <h3>Cetak Invoice</h3>
+        <div class="input-group">
+          <label for="ongkir-input">Ongkos Kirim (Rp):</label>
+          <input
+            type="number"
+            id="ongkir-input"
+            v-model.number="ongkosKirim"
+            placeholder="Contoh: 15000"
+            class="form-input"
+          />
+        </div>
+        <button @click="downloadInvoice" class="btn btn-download" :disabled="loadingDownload">
+          <span v-if="loadingDownload">Membuat PDF...</span><span v-else>Cetak Invoice PDF</span>
+        </button>
+        <small class="hint-text">*Masukkan ongkos kirim sebelum mencetak invoice.</small>
+      </div>
+    </div>
+  </div>
 </template>
 
 <style scoped>
@@ -249,7 +319,6 @@ onMounted(() => {
 }
 
 .btn-download {
-  margin-top: 20px;
   background-color: green;
   border: none;
   padding: 10px 20px;
@@ -262,7 +331,6 @@ onMounted(() => {
 .btn-download:hover {
   background-color: #eac100;
 }
-
 
 .loading {
   display: flex;
@@ -305,5 +373,98 @@ onMounted(() => {
   pointer-events: none;
   color: #d4a300;
   font-size: 12px;
+}
+
+.action-panel-wrapper {
+  margin-top: 30px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 25px;
+}
+
+.action-card {
+  background-color: transparent;
+  padding: 10px;
+  border-radius: 12px;
+}
+
+.action-card h3 {
+  color: #333;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  font-size: 18px;
+}
+
+.input-group {
+  margin-bottom: 20px;
+}
+
+.input-group label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #555;
+}
+
+.form-input,
+.form-select {
+  background-color: transparent;
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ced4da;
+  font-size: 15px;
+  box-sizing: border-box;
+  transition:
+    border-color 0.3s,
+    box-shadow 0.3s;
+}
+
+.form-input:focus,
+.form-select:focus {
+  border-color: #d2a400;
+  box-shadow: 0 0 0 3px rgba(210, 164, 0, 0.1);
+  outline: none;
+}
+
+.btn {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 700;
+  color: white;
+  transition: background-color 0.3s;
+  text-transform: uppercase;
+}
+
+.btn-save {
+  background-color: #d2a400;
+}
+
+.btn-save:hover:not(:disabled) {
+  background-color: #c09400;
+}
+
+.btn-download {
+  background-color: #28a745;
+}
+
+.btn-download:hover:not(:disabled) {
+  background-color: #1e7e34;
+}
+
+.btn:disabled {
+  background-color: #adb5bd;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.hint-text {
+  display: block;
+  margin-top: 10px;
+  font-size: 13px;
+  color: #888;
 }
 </style>
