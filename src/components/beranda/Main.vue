@@ -6,7 +6,7 @@ import { Icon } from '@iconify/vue'
   <div class="main">
     <div class="left-container">
       <header>
-        <h1>
+        <h1 class="main-judul">
           SNACK <span class="highlight">KENTANG</span> IRIS TIPIS DENGAN
           <span class="highlight">KENTANG</span> ASLI
         </h1>

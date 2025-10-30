@@ -42,7 +42,7 @@ main {
     justify-content: flex-start;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
     gap: 80px;
-    padding: 70px 180px;
+    padding: 20px;
     border-radius: 40px;
     max-width: 1300px;
 }
@@ -51,10 +51,11 @@ main {
     position: relative;
     flex-shrink: 0;
     transform: translateX(-30px);
+    left: 50px;
 }
 
 .cta-image img {
-    width: 360px;
+    width: 340px;
     border-radius: 25px;
     object-fit: cover;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);

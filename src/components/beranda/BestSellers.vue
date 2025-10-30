@@ -89,16 +89,19 @@ import { RouterLink } from 'vue-router'
 <style scoped>
 main {
   padding: 30px;
+  margin-top: 70px;
 }
 header {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+  margin-left: 60px;
 }
 header h1 {
   font-weight: 700;
   color: #d4a300;
   font-family: 'DynaPuff', sans-serif;
+  font-size: 45px;
 }
 header p,
 div {
@@ -111,6 +114,7 @@ div {
 header p {
   text-decoration: underline;
   color: #353535;
+  margin-left: 10px;
 }
 
 .button-panah {
@@ -122,6 +126,7 @@ header p {
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-left: 8px;
 }
 
 .router-link {
@@ -130,8 +135,8 @@ header p {
 
 .container-card {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  padding: 20px;
+  grid-template-columns: repeat(3,1fr);
+  padding: 60px;
 }
 
 .card h1 {
