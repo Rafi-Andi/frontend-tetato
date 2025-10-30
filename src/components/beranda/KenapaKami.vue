@@ -63,6 +63,7 @@
   padding: 30px;
   margin-bottom: 50px;
   font-size: 45px;
+  margin-left: 60px;
 }
 
 .card-container {

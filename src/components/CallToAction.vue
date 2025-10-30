@@ -11,7 +11,7 @@
         <div class="cta-content">
             <h2>Bersiap untuk <span>Menikmati?</span></h2>
             <p>Pesan sekarang dan temukan kenikmatan Tetato Chips yang bikin kamu susah berhenti ngemil</p>
-            <a href="#" class="cta-button ">Pesan Sekarang</a>
+            <router-link :to="{name: 'produk'}" class="cta-button ">Pesan Sekarang</router-link>
         </div>
     </section>
 </main>
@@ -32,7 +32,6 @@ main {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background-color: #ffffff;
 }
 
 .cta-section {
@@ -42,7 +41,7 @@ main {
     justify-content: flex-start;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
     gap: 80px;
-    padding: 70px 180px;
+    padding: 20px;
     border-radius: 40px;
     max-width: 1300px;
 }
@@ -51,10 +50,11 @@ main {
     position: relative;
     flex-shrink: 0;
     transform: translateX(-30px);
+    left: 50px;
 }
 
 .cta-image img {
-    width: 360px;
+    width: 340px;
     border-radius: 25px;
     object-fit: cover;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);

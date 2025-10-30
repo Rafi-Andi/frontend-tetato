@@ -17,8 +17,8 @@
         yang menawarkan pengalaman kriuk tak terlupakan. <br />Didirikan di Surabaya pada maret
         2024.
       </p>
-      <div class="button">
-        <button><a href="">Ikuti Kami ></a></button>
+      <div class="button" style="cursor: pointer;">
+        <button><a href="https://www.instagram.com/tetato.id/">Ikuti Kami ></a></button>
       </div>
     </div>
     <div class="right-container">
@@ -37,7 +37,7 @@
   display: flex;
   justify-content: space-around;
   flex-wrap: wrap;
-  margin-top: 130px;
+  padding: 150px 20px;
 }
 
 .h1 {

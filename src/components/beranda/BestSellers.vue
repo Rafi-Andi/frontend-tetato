@@ -5,13 +5,14 @@ import { RouterLink } from 'vue-router'
 </script>
 
 <template>
-  <main>
+  <main id="best-sellers">
     <header>
       <h1>Produk Terbaik.</h1>
-      <p>Lihat Semua</p>
-      <router-link class="router-link" :to="{ name: 'produk' }"
-        ><div class="button-panah">></div></router-link
-      >
+      <router-link style="display: flex; align-items: center;" class="router-link" :to="{ name: 'produk' }">
+        <p>Lihat Semua</p>
+
+        <div class="button-panah">></div>
+      </router-link>
     </header>
     <div class="container-card">
       <div class="card satu">
@@ -89,16 +90,19 @@ import { RouterLink } from 'vue-router'
 <style scoped>
 main {
   padding: 30px;
+  margin-top: 70px;
 }
 header {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+  margin-left: 60px;
 }
 header h1 {
   font-weight: 700;
   color: #d4a300;
   font-family: 'DynaPuff', sans-serif;
+  font-size: 45px;
 }
 header p,
 div {
@@ -111,6 +115,7 @@ div {
 header p {
   text-decoration: underline;
   color: #353535;
+  margin-left: 10px;
 }
 
 .button-panah {
@@ -122,6 +127,7 @@ header p {
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-left: 8px;
 }
 
 .router-link {
@@ -131,7 +137,7 @@ header p {
 .container-card {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  padding: 20px;
+  padding: 60px;
 }
 
 .card h1 {
