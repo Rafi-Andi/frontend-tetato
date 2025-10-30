@@ -16,6 +16,7 @@ const goBack = () => {
 
 <style scoped>
 .btn {
+  margin-top: 50px;
   color: white;
   border: none;
   padding: 10px 40px;

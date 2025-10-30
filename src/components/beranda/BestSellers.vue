@@ -5,13 +5,14 @@ import { RouterLink } from 'vue-router'
 </script>
 
 <template>
-  <main>
+  <main id="best-sellers">
     <header>
       <h1>Produk Terbaik.</h1>
-      <p>Lihat Semua</p>
-      <router-link class="router-link" :to="{ name: 'produk' }"
-        ><div class="button-panah">></div></router-link
-      >
+      <router-link style="display: flex; align-items: center;" class="router-link" :to="{ name: 'produk' }">
+        <p>Lihat Semua</p>
+
+        <div class="button-panah">></div>
+      </router-link>
     </header>
     <div class="container-card">
       <div class="card satu">
@@ -135,7 +136,7 @@ header p {
 
 .container-card {
   display: grid;
-  grid-template-columns: repeat(3,1fr);
+  grid-template-columns: repeat(3, 1fr);
   padding: 60px;
 }
 

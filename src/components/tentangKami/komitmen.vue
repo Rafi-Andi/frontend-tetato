@@ -77,7 +77,7 @@ import { Icon } from '@iconify/vue'
 .container {
   display: flex;
   justify-content: space-around;
-  margin-top: 80px;
+  margin-top: 40px;
 }
 
 .left-container h1 {

@@ -28,7 +28,7 @@
           dan penuh cita rasa <br />yang disukai anak muda
         </p>
         <button class="btn">
-          <a href="">Lihat Produk</a>
+          <router-link :to="{name: 'produk'}">Lihat Produk</router-link>
         </button>
       </div>
     </div>

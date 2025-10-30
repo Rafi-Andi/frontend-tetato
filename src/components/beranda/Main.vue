@@ -19,8 +19,8 @@ import { Icon } from '@iconify/vue'
       <div class="desc-text"></div>
 
       <div class="button-container">
-        <button class="button-text1">Beli Sekarang</button>
-        <button class="button-text2">Produk Terbaik</button>
+        <router-link :to="{name: 'produk'}" style="text-decoration: none;" class="button-text1">Beli Sekarang</router-link>
+        <a href="#best-sellers" style="text-decoration: none;" class="button-text2">Produk Terbaik</a>
       </div>
 
       <div class="label-container">
