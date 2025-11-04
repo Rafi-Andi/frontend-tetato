@@ -2,7 +2,7 @@
 
 <template>
   <div class="judul-card">
-    <h1 class="text-card">Kenapa Harus Kami ?</h1>
+    <h1 class="text-card">Kenapa Harus Tetato Chips ?</h1>
   </div>
   <div class="card-container">
     <div class="test-card">

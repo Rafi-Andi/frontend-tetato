@@ -37,7 +37,7 @@
 
 <style scoped>
 .container {
-  margin-top: 100px;
+  margin-top: 50px;
 }
 
 .judul h1 {
@@ -45,34 +45,54 @@
   font-size: 45px;
   color: #d4a300;
   font-family: 'dynapuff';
+  margin-bottom: 50px; /* Tambahkan jarak dari judul ke konten */
 }
 
+/* Mengubah layout utama menjadi Flexbox (Desktop) */
 .content {
-  position: relative;
-  top: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 50px; /* Jarak antara gambar dan teks (dapat disesuaikan) */
+  max-width: 1300px;
+  margin: 0 auto; /* Pusatkan container */
+  padding: 0 20px; /* Padding samping */
 }
 
+/* Hapus properti position/z-index untuk desktop yang lama */
 .left-container {
-  position: absolute;
-  z-index: 5;
-  left: 18%;
+  flex-shrink: 0; /* Mencegah gambar mengecil dari ukuran aslinya */
+  /* Hilangkan position: absolute; z-index: 5; left: 18%; */
+}
+
+.left-container img {
+  width: 550px; /* Gunakan nilai width yang sudah Anda tentukan */
+  max-width: 100%; /* Agar gambar tetap responsif */
+  border-radius: 20px; /* Tambahkan sedikit radius agar seperti contoh */
+  object-fit: cover;
 }
 
 .right-container {
-  position: absolute;
-  z-index: 10;
+  /* Hapus properti position/z-index untuk desktop yang lama */
+  /* Hilangkan position: absolute; z-index: 10; left: 56%; top: 60px; */
+  
   font-family: 'poppins';
   background-color: #ffc300;
-  left: 56%;
-  top: 60px;
   padding: 30px;
   font-weight: 400;
-  border-radius: 30px 30px 0px 30px;
+  border-radius: 30px; /* Bulatkan semua sudut */
+  flex-grow: 1; /* Biarkan mengisi ruang */
+  max-width: 400px; /* Batasi lebar container kanan */
 }
 
 .right-container h1 {
-  font-size: 20px;
+  font-size: 30px; /* Ukuran heading yang lebih besar agar menonjol */
   margin-bottom: 20px;
+  line-height: 1.2;
+}
+
+.right-container p {
+  font-size: 16px; /* Ukuran paragraf yang nyaman dibaca */
 }
 
 .btn {
@@ -89,54 +109,70 @@
   font-family: 'poppins';
   font-weight: 600;
   color: white;
+  display: block;
 }
 
-@media (max-width: 768px) {
-  .content {
-    flex-direction: column; /* Ubah tata letak menjadi vertikal */
-    align-items: center;
-    gap: 0; /* Hilangkan jarak default */
-  }
+/* ======================================= */
+/* MEDIA QUERY: LAYAR TABLET & MOBILE (MAX 1024PX) */
+/* ======================================= */
+@media (max-width: 1024px) {
+    /* 1. HILANGKAN GAMBAR */
+    .left-container {
+        display: none; 
+    }
 
-  .left-container, .right-container {
-      flex: 1 1 100%; /* Ambil lebar penuh */
-      max-width: 90%; /* Batasi agar ada ruang di pinggir */
-      transform: none; /* Hapus efek tumpang tindih */
-      left: auto;
-      position: relative; /* Kembali ke posisi normal */
-  }
+    /* 2. Pusatkan container teks */
+    .content {
+        justify-content: center; /* Konten sekarang hanya right-container */
+    }
 
-  .left-container {
-      order: 1; /* Gambar di atas */
-      margin-bottom: -50px; /* Tarik gambar ke bawah sedikit agar menempel/sedikit tumpang tindih dengan kotak teks */
-  }
-  
-  .left-container img {
-      width: 100%; /* Gambar mengisi lebar container */
-      max-width: 300px; /* Batas maksimum ukuran gambar */
-      margin: 0 auto;
-  }
-  
-  .right-container {
-      order: 2; /* Teks di bawah */
-      text-align: center; /* Pusatkan teks */
-      border-radius: 20px; /* Bulatkan semua sudut */
-      padding: 30px;
-  }
-  
-  .right-container h1 {
-      font-size: 20px;
-  }
+    /* 3. Atur ulang container teks */
+    .right-container {
+        max-width: 80%; /* Biarkan teks mengambil lebar penuh di tengah */
+        margin: 0 auto;
+        padding: 40px;
+        text-align: center;
+    }
+    
+    .right-container h1 {
+        font-size: 28px;
+    }
 
-  .right-container p {
-      font-size: 14px;
-      /* Tambahkan tag <br> kembali jika perlu baris pendek untuk mobile, tapi lebih baik biarkan mengalir */
-      text-align: left; /* Teks paragraf bisa tetap rata kiri agar mudah dibaca */
-  }
+    .right-container p {
+        font-size: 16px;
+        /* Hapus tag <br/> di HTML atau biarkan teks mengalir */
+    }
 
-  .btn {
-      width: 100%;
-      max-width: 200px; /* Batas maksimum lebar tombol */
-  }
+    .btn {
+        width: 200px; /* Tombol sedikit lebih lebar */
+    }
+}
+
+/* ======================================= */
+/* MEDIA QUERY: LAYAR MOBILE (MAX 600PX) */
+/* ======================================= */
+@media (max-width: 600px) {
+    /* Gambar sudah tersembunyi dari 1024px, tinggal penyesuaian teks */
+    .judul h1 {
+        font-size: 35px;
+    }
+    
+    .right-container {
+        max-width: 90%; 
+        padding: 30px 20px;
+        border-radius: 15px;
+    }
+    
+    .right-container h1 {
+        font-size: 22px;
+    }
+
+    .right-container p {
+        font-size: 14px;
+    }
+
+    .btn {
+        width: 100%; /* Tombol lebar penuh di HP */
+    }
 }
 </style>

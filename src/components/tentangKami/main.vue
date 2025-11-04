@@ -75,58 +75,99 @@ p {
   height: 350px;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .main {
-    flex-direction: column; /* Ubah tata letak menjadi vertikal */
-    text-align: center; /* Pusatkan teks */
-    margin-top: 50px; /* Kurangi margin atas */
+    /* Kurangi padding vertikal saat di tablet */
+    padding: 80px 20px; 
+    /* Izinkan konten untuk tumpuk jika perlu */
+    flex-direction: column; 
+    align-items: center; /* Pusatkan item saat tumpuk */
   }
 
-  .left-container {
-    order: 2; /* Pindahkan konten teks ke bawah di mobile */
-    margin-top: 30px;
-  }
-
-  .right-container {
-    order: 1; /* Pindahkan gambar ke atas di mobile */
+  .left-container, .right-container {
+    /* Pastikan keduanya mengambil lebar penuh jika tumpuk, 
+       atau set lebar agar tetap proporsional */
+    width: 100%;
+    max-width: 600px; /* Batasi lebar maksimal agar tidak terlalu lebar di layar besar */
+    text-align: center; /* Pusatkan teks pada tampilan tablet/mobile */
   }
 
   .h1 {
-    font-size: 36px; /* Kurangi ukuran font untuk H1 */
+    font-size: 40px;
+  }
+  
+  .right-container {
+    /* Pindah gambar ke atas */
+    order: -1; 
   }
 
-  p {
-    font-size: 16px; /* Kurangi ukuran font untuk paragraf */
-  }
-
-  /* Kebutuhan untuk gambar */
   .right-container img {
-    width: 250px; /* Ukuran gambar yang lebih kecil di mobile */
-    height: 250px;
-    margin: 0 auto; /* Pusatkan gambar */
-  }
-
-  .button button {
-    width: 100%; /* Tombol bisa full-width di mobile untuk kemudahan klik */
-    max-width: 300px; /* Batasi lebar maksimum tombol */
+    /* Ukuran gambar lebih kecil di tablet */
+    width: 300px;
+    height: 300px;
+    margin-bottom: 30px; 
   }
 }
 
-/*
-  MEDIA QUERY: Untuk layar dengan lebar maksimum 480px (Mobile sangat kecil)
-*/
-@media (max-width: 480px) {
-    .h1 {
-        font-size: 30px;
-    }
+/* ------------------------------------------- */
+/* MEDIA QUERY: Maksimal Lebar 600px */
+/* ------------------------------------------- */
 
-    p {
-        font-size: 14px;
-    }
+@media (max-width: 600px) {
+  .main {
+    padding: 50px 15px;
+    /* Memastikan konten di tengah */
+    align-items: center; 
+  }
 
-    .right-container img {
-        width: 200px;
-        height: 200px;
-    }
+  .left-container, .right-container {
+    max-width: 85%; /* Batasi lebar maksimal agar tidak terlalu lebar di mobile */
+    /* Set lebar default ke 100% dari max-width 85% */
+    width: 100%; 
+  }
+  
+  .h1 {
+    font-size: 32px;
+    /* Pusatkan teks h1 */
+    text-align: center; 
+    line-height: 1.2;
+  }
+  
+  .left-container {
+    /* Pusatkan semua konten di left-container */
+    text-align: center; 
+  }
+
+  .right-container {
+    order: -1; 
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .right-container img {
+    width: 250px;
+    height: 250px;
+  }
+  
+  p {
+    font-size: 16px;
+    /* Teks paragraf sekarang dipusatkan */
+    text-align: center; 
+    /* Batasi lebar paragraf agar tidak terlalu panjang */
+    max-width: 90%; 
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .button {
+    /* Pastikan tombol tetap di tengah */
+    text-align: center;
+  }
+  
+  .button button {
+    width: 100%; 
+    max-width: 250px;
+    margin: 15px auto; /* Margin auto untuk memusatkan tombol */
+  }
 }
 </style>

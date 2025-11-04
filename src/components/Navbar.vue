@@ -62,6 +62,21 @@ const {totalKeranjang} = storeToRefs(KeranjangStore)
               <Icon class="icon-nav" icon="mdi:information-outline" width="22px" /> Tentang Kami
             </router-link>
           </li>
+          <!-- <li>
+            <a href="/" @click="isMenuOpen = false">
+              <Icon class="icon-nav" icon="mdi:home-outline" width="22px" /> Beranda
+            </a>
+          </li>
+          <li>
+            <a href="/produk" @click="isMenuOpen = false">
+              <Icon class="icon-nav" icon="mdi:bag-personal-outline" width="22px" /> Produk
+            </a>
+          </li>
+          <li>
+            <a href="/tentang-kami" @click="isMenuOpen = false">
+              <Icon class="icon-nav" icon="mdi:information-outline" width="22px" /> Tentang Kami
+            </a>
+          </li> -->
         </ul>
       </div>
 

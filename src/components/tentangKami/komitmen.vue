@@ -64,7 +64,7 @@ import { Icon } from '@iconify/vue'
 
 <style scoped>
 .komitmen-container {
-  margin-top: 600px;
+  margin-top: 250px;
 }
 
 .judul {
@@ -72,6 +72,7 @@ import { Icon } from '@iconify/vue'
   font-size: 23px;
   color: #d4a300;
   font-family: 'dynapuff';
+  margin-bottom: 70px;
 }
 
 .container {
@@ -109,5 +110,73 @@ import { Icon } from '@iconify/vue'
   font-family: 'poppins', sans-serif;
   font-size: 15px;
   font-weight: 450;
+}
+
+@media (max-width: 1024px) {
+    .container {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .left-container {
+      width: 90%; 
+      max-width: 700px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .left-container h1 {
+      font-size: 38px;
+    }
+
+    .desc-container {
+      text-align: left;
+    }
+
+    .right-container {
+      margin-top: 40px;
+    }
+
+    .right-container img {
+      display: none;
+    }
+}
+
+@media (max-width: 600px) {
+  .komitmen-container {
+    margin-top: 20px;
+  }
+
+  .judul {
+    font-size: 18px;
+    margin-bottom: 30px;
+  }
+
+  .left-container {
+    width: 95%;
+    max-width: 100%;
+    text-align: center;
+  }
+
+  .left-container h1 {
+    font-size: 30px;
+  }
+
+  .right-container {
+    display: none;
+  }
+
+  .desc {
+    padding: 10px;
+    margin: 10px auto;
+  }
+
+  .text {
+    font-size: 14px;
+  }
+
+  .left-container h1 span br, .desc .text p br {
+    display: none;
+  }
 }
 </style>
