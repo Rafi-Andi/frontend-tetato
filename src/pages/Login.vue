@@ -1,4 +1,5 @@
 <script setup>
+import BaseURL from '@/lib/BaseUrl'
 import showAlert from '@/lib/Swal'
 import router from '@/router'
 import axios from 'axios'
@@ -17,7 +18,7 @@ const messageValidasi = ref([])
 const handleLogin = async () => {
   try {
     isLoading.value = true
-    const response = await axios.post('http://127.0.0.1:8000/api/login', formLogin.value)
+    const response = await axios.post(`${BaseURL}/api/login`, formLogin.value)
     console.log(response)
     message.value = response.data.message
 

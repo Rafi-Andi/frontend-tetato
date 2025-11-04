@@ -7,11 +7,14 @@ import { useKeranjangStore } from '@/stores/Keranjang'
 import axios from 'axios'
 import { storeToRefs } from 'pinia'
 import { computed, onMounted, ref } from 'vue'
+import Swal from 'sweetalert2'
+import BaseUrl from '@/lib/BaseUrl'
 
 const KeranjangStore = useKeranjangStore()
 
 const { totalHarga, jumlahProduk, keranjangBelanja } = storeToRefs(KeranjangStore)
-const { getJumlahProduk, hapusKeranjang, getKeranjang, getTotalHarga } = KeranjangStore
+const { getJumlahProduk, hapusKeranjang, getKeranjang, getTotalHarga, clearKeranjang } =
+  KeranjangStore
 const produks = keranjangBelanja
 
 const handlerHapus = (index) => {
@@ -45,19 +48,46 @@ const dataResponse = ref(null)
 
 const handleCheckout = async () => {
   try {
+    Swal.fire({
+      title: 'Memproses Pesanan...',
+      text: 'Mohon tunggu sebentar, kami sedang menyiapkan bukti pemesanan Anda.',
+      allowOutsideClick: false,
+      didOpen: () => Swal.showLoading(),
+    })
     isLoading.value = true
-    const response = await axios.post('http://127.0.0.1:8000/api/checkout', checkoutForm.value)
+    const response = await axios.post(`${BaseUrl}/api/checkout`, checkoutForm.value)
     dataResponse.value = response.data.data
     message.value = response.data.message
+    const data = response.data.data
 
     console.log(response)
     console.log(dataResponse.value)
 
-    showAlert(
-      'Berhasil Memproses Pesanan',
-      'Tunggu dihubungi oleh admin untuk pembayaran',
-      'success',
-    )
+    Swal.close()
+
+    await Swal.fire({
+      title: 'Pesanan Berhasil!',
+      html: `
+        <p>Terima kasih telah memesan di <b>Tetato Chips</b>! 🍟</p>
+        <p>Bukti pesanan Anda akan diunduh secara otomatis.</p>
+        <p>Tim kami akan menghubungi Anda melalui WhatsApp untuk konfirmasi ongkir & pembayaran akhir.</p>
+      `,
+      icon: 'success',
+      confirmButtonColor: '#d4a300',
+      confirmButtonText: 'Unduh Bukti Pesanan',
+      allowOutsideClick: false,
+    })
+
+    await downloadBuktiOrder(data)
+
+    await Swal.fire({
+      title: 'Bukti Pesanan Telah Diunduh',
+      text: 'Simpan file ini sebagai bukti transaksi Anda.',
+      icon: 'info',
+      confirmButtonColor: '#d4a300',
+    })
+
+    showAlert('Berhasil Memproses Pesanan', '', 'success')
     checkoutForm.value = {
       nama_pelanggan: '',
       email: '',
@@ -65,6 +95,8 @@ const handleCheckout = async () => {
       alamat_pengiriman: '',
       items: item,
     }
+
+    clearKeranjang()
   } catch (error) {
     console.log(error)
     isError.value = true
@@ -79,6 +111,46 @@ const handleCheckout = async () => {
     isLoading.value = false
   }
 }
+
+const downloadBuktiOrder = async (data) => {
+  try {
+    const response = await axios({
+      url: `${BaseUrl}/api/bukti-order`,
+      method: 'POST',
+      data: data,
+      responseType: 'blob',
+    })
+
+    const blob = new Blob([response.data], { type: 'application/pdf' })
+
+    const fileName = `ORDER-${data.kode_pesanan}.pdf`
+
+    const fileURL = window.URL.createObjectURL(blob)
+
+    const fileLink = document.createElement('a')
+    fileLink.href = fileURL
+    fileLink.setAttribute('download', fileName)
+    document.body.appendChild(fileLink)
+
+    fileLink.click()
+    window.URL.revokeObjectURL(fileURL)
+    document.body.removeChild(fileLink)
+  } catch (error) {
+    console.log(error.response)
+    console.error('Gagal mengunduh invoice:', error)
+    showAlert('Gagal', 'Gagal mengunduh file. Periksa input ongkir.', 'error')
+  }
+}
+
+const handlePhoneInput = (e) => {
+  let value = e.target.value
+  value = value.replace(/\D/g, '')
+  if (value.startsWith('0')) {
+    value = value.substring(1)
+  }
+  checkoutForm.value.telepon = value
+}
+
 </script>
 
 <template>
@@ -168,8 +240,9 @@ const handleCheckout = async () => {
             required
             v-model="checkoutForm.telepon"
             type="text"
+            @input="handlePhoneInput"
             id="nomer"
-            placeholder="08123456678"
+            placeholder="8123456678"
           />
           <div v-if="messageError?.telepon">
             <h5 v-for="(error, index) in messageError.telepon" :key="index">
@@ -182,7 +255,7 @@ const handleCheckout = async () => {
           <textarea
             v-model="checkoutForm.alamat_pengiriman"
             id="alamat"
-            placeholder="Ketegan RT 07 / 02, Ketegan Taman Sidoarjo"
+            placeholder="Contoh: Jl. Mawar No. 12, Perumahan Sakura, Surabay"
           ></textarea>
           <div v-if="messageError?.alamat_pengiriman">
             <h5 v-for="(error, index) in messageError.alamat_pengiriman" :key="index">

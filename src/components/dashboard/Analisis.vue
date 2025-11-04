@@ -1,4 +1,5 @@
 <script setup>
+import BaseURL from '@/lib/BaseUrl'
 import { formatRupiah } from '@/lib/FormatRupiah'
 import { formatTanggalIndonesia } from '@/lib/FormatTanggal'
 import router from '@/router'
@@ -25,7 +26,7 @@ const isLoadingFetching = ref(false)
 const fetchingStatistik = async () => {
   try {
     isLoadingFetching.value = true
-    const responseStatistik = await axios.get('http://127.0.0.1:8000/api/analisis', {
+    const responseStatistik = await axios.get(`${BaseURL}/api/analisis`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -73,7 +74,7 @@ const fetchingPesananBaru = async (page = 1) => {
   try {
     isLoadingPesanan.value = true
     const responsePesananBaru = await axios.get(
-      `http://127.0.0.1:8000/api/pesanan?page=${page}&status=baru`,
+      `${BaseURL}/api/pesanan?page=${page}&status=baru`,
       {
         headers: {
           Authorization: `Bearer ${token}`,

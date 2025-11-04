@@ -4,7 +4,7 @@ import { computed, ref } from 'vue'
 const KERANJANG_KEY = 'keranjang-belanja'
 
 export const useKeranjangStore = defineStore('keranjang-store', () => {
-  const keranjangBelanja = ref(JSON.parse(localStorage.getItem('keranjang-belanja')) || [])
+  const keranjangBelanja = ref(JSON.parse(localStorage.getItem('keranjang-belanja')) || []) 
   const jumlahProduk = ref(0)
   const totalHarga = ref(0)
 
@@ -12,7 +12,8 @@ export const useKeranjangStore = defineStore('keranjang-store', () => {
 
   const getKeranjang = () => {
     console.log(keranjangBelanja.value)
-    return JSON.parse(localStorage.getItem('keranjang-belanja'))
+    const data = JSON.parse(localStorage.getItem('keranjang-belanja'))
+    return data ||[]
   }
 
   const addKeranjang = (data) => {
@@ -56,5 +57,13 @@ export const useKeranjangStore = defineStore('keranjang-store', () => {
     totalHarga.value = harga
   }
 
-  return { keranjangBelanja, totalKeranjang, addKeranjang, getKeranjang, hapusKeranjang, getJumlahProduk, getTotalHarga, totalHarga, jumlahProduk }
+  const clearKeranjang = () => {
+    keranjangBelanja.value = []
+    
+    localStorage.removeItem(KERANJANG_KEY)
+    getJumlahProduk()
+    getTotalHarga()
+  }
+
+  return { keranjangBelanja, totalKeranjang, addKeranjang, getKeranjang, hapusKeranjang, getJumlahProduk, getTotalHarga, totalHarga, jumlahProduk, clearKeranjang }
 })

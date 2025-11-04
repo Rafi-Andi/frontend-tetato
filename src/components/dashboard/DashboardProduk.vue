@@ -6,6 +6,7 @@ import { formatRupiah } from '@/lib/FormatRupiah'
 import showAlert from '@/lib/Swal'
 import Cookies from 'js-cookie'
 import router from '@/router'
+import BaseURL from '@/lib/BaseUrl'
 
 const produkBaru = ref({
   kategori_id: '',
@@ -28,7 +29,7 @@ const totalPages = ref(0)
 const currentPage = ref(1)
 
 const fetchProduks = async (page = 1) => {
-  const response = await axios.get(`http://127.0.0.1:8000/api/produk?page=${page}`)
+  const response = await axios.get(`${BaseURL}/api/produk?page=${page}`)
   console.log('data :', response.data)
   const data = response.data.data
   produks.value = data.data
@@ -52,7 +53,7 @@ const tambahProduk = async () => {
         formData.append('file_path', produkBaru.value.file_path)
       }
       const response = await axios.post(
-        `http://127.0.0.1:8000/api/produk/${editId.value}`,
+        `${BaseURL}/api/produk/${editId.value}`,
         formData,
         {
           headers: {
@@ -72,7 +73,7 @@ const tambahProduk = async () => {
       produkBaru.value.preview = ''
       editId.value = null
       fetchProduks(currentPage.value)
-    } else {
+    } else {  
       const formData = new FormData()
       formData.append('kategori_id', produkBaru.value.kategori_id)
       formData.append('nama_produk', produkBaru.value.nama_produk)
@@ -80,7 +81,7 @@ const tambahProduk = async () => {
       formData.append('deskripsi', produkBaru.value.deskripsi)
       formData.append('file_path', produkBaru.value.file_path)
 
-      const response = await axios.post('http://127.0.0.1:8000/api/produk', formData, {
+      const response = await axios.post(`${BaseURL}/api/produk`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           Authorization: 'Bearer 1|0sZqeLnK0txIokujN6sTMVGgCwLaAzKVooYvNjuu087acf03',
@@ -139,7 +140,7 @@ const buttonCancel = () => {
 
 const hapusProduk = async (id) => {
   try {
-    const response = await axios.delete(`http://127.0.0.1:8000/api/produk/${id}`, {
+    const response = await axios.delete(`${BaseURL}/api/produk/${id}`, {
       headers: {
         'Content-Type': 'multipart/form-data',
         Authorization: 'Bearer 1|0sZqeLnK0txIokujN6sTMVGgCwLaAzKVooYvNjuu087acf03',
@@ -157,7 +158,7 @@ const hapusProduk = async (id) => {
 const daftarKategori = ref(null)
 
 const fetchKategori = async () => {
-  const response = await axios.get(`http://127.0.0.1:8000/api/kategori/all`)
+  const response = await axios.get(`${BaseURL}/api/kategori/all`)
   console.log('kategori :', response)
   const data = response.data.data
   console.log(data)

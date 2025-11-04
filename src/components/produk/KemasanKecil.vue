@@ -1,5 +1,6 @@
 <script setup>
 import CardProduk from '@/fragments/CardProduk.vue'
+import BaseURL from '@/lib/BaseUrl'
 import { useProdukStore } from '@/stores/Produk'
 import axios from 'axios'
 import { storeToRefs } from 'pinia'
@@ -17,7 +18,7 @@ const kategoriAktif = ref('')
 
 const fetchProduks = async (page = 1, kategori = '') => {
   if (!kategori) {
-    const response = await axios.get(`http://127.0.0.1:8000/api/produk?page=${page}`)
+    const response = await axios.get(`${BaseURL}/api/produk?page=${page}`)
     console.log('data :', response.data)
     const data = response.data.data
     produks.value = data.data
@@ -27,7 +28,7 @@ const fetchProduks = async (page = 1, kategori = '') => {
     totalPages.value = data.last_page
   } else {
     const response = await axios.get(
-      `http://127.0.0.1:8000/api/produk?page=${page}&kategori=${kategori}`,
+      `${BaseURL}/api/produk?page=${page}&kategori=${kategori}`,
     )
     console.log('data :', response.data)
     const data = response.data.data
@@ -40,7 +41,7 @@ const fetchProduks = async (page = 1, kategori = '') => {
 }
 
 const fetchKategori = async () => {
-  const response = await axios.get(`http://127.0.0.1:8000/api/kategori/all`)
+  const response = await axios.get(`${BaseURL}/api/kategori/all`)
   console.log('kategori :', response)
   const data = response.data.data
   console.log(data)

@@ -1,4 +1,4 @@
-<script setup>
+<!-- <script setup>
 import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { formatRupiah } from '@/lib/FormatRupiah'
@@ -7,6 +7,8 @@ import { formatTanggalIndonesia } from '@/lib/FormatTanggal'
 import showAlert from '@/lib/Swal'
 import Cookies from 'js-cookie'
 import router from '@/router'
+import BaseURL from '@/lib/BaseUrl'
+import Swal from 'sweetalert2'
 
 const route = useRoute()
 
@@ -14,7 +16,7 @@ const idPesanan = route.params.id
 
 const pesanan = ref(null)
 
-const daftarStatus = ['baru', 'proses', 'selesai']
+const daftarStatus = ['baru', 'proses', 'dikirim', 'selesai']
 const status = ref('')
 
 const opsiLain = computed(() => daftarStatus.filter((s) => s !== status.value))
@@ -29,7 +31,7 @@ if (!token) {
 const pesananFetch = async () => {
   try {
     loading.value = true
-    const response = await axios.get(`http://127.0.0.1:8000/api/pesanan/${idPesanan}`, {
+    const response = await axios.get(`${BaseURL}/api/pesanan/${idPesanan}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -53,23 +55,93 @@ const updateStatus = async () => {
   try {
     loadingUpdate.value = true
     const response = await axios.put(
-      `http://127.0.0.1:8000/api/pesanan/${idPesanan}`,
-      {
-        status: status.value,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      },
+      `${BaseURL}/api/pesanan/${idPesanan}`,
+      { status: status.value },
+      { headers: { Authorization: `Bearer ${token}` } },
     )
 
-    console.log(response)
+    showAlert('Berhasil', 'Status pesanan berhasil diperbarui.', 'success')
+    pesanan.value.status = status.value
 
-    const message = response.data.message
+    const nama = pesanan.value.nama_pelanggan
+    const kode = pesanan.value.kode_pesanan
+    const nomor = pesanan.value.telepon
+    let total = formatRupiah(pesanan.value.total_harga)
+    const daftarProduk = pesanan.value.pesanan_details
+      .map((item) => `- ${item.nama_produk} (${item.jumlah}x) - ${formatRupiah(item.subtotal)}`)
+      .join('\n')
+    let messageWhatsapp = ''
 
-    pesanan.value.status = response.data.data
-    showAlert('Berhasil', message, 'success')
+    if (status.value === 'proses') {
+      messageWhatsapp = `
+Halo ${nama} 👋  
+Pembayaran untuk pesanan Anda #${kode} telah kami terima ✅  
+
+Berikut rincian pesanan Anda:
+${daftarProduk}
+
+💵 Subtotal: ${total}  
+🚚 Ongkir: ${formatRupiah(ongkosKirim.value)}
+📦 Total: ${formatRupiah((pesanan.value.total_harga += ongkosKirim.value))}
+
+Pesanan Anda sedang diproses dan akan segera dikirim 💪  
+Terima kasih telah berbelanja di Tetato Chips ❤
+`
+    } else if (status.value === 'dikirim') {
+      const { value: ekspedisi } = await Swal.fire({
+        title: 'Masukkan ekspedisi pengiriman',
+        input: 'textarea',
+        inputLabel: 'Nama ekspedisi pengirim pesanan',
+        inputPlaceholder: 'Contoh: JNE REG',
+        showCancelButton: true,
+        confirmButtonText: 'Kirim',
+      })
+      const { value: resi } = await Swal.fire({
+        title: 'Masukkan Resi pengiriman',
+        input: 'textarea',
+        inputLabel: 'Resi pengirim pesanan',
+        inputPlaceholder: 'Contoh: JNE123456789',
+        showCancelButton: true,
+        confirmButtonText: 'Kirim',
+      })
+
+      messageWhatsapp = `
+Halo ${nama}👋  
+Pesanan Anda dengan nomor #${kode} telah diperbarui 🛍  
+
+📦 Status terbaru: Dikirim  
+Ekspedisi: ${ekspedisi}  
+Nomor Resi: ${resi} 
+
+Berikut daftar pesanan Anda:
+${daftarProduk}
+
+Terima kasih telah berbelanja di Tetato Chips 
+      `
+    } else if (status.value === 'selesai') {
+      messageWhatsapp = `
+Halo ${nama} 👋  
+
+Pesanan Anda dengan nomor #${kode} telah selesai 🎉  
+
+Berikut ringkasannya:
+${daftarProduk}
+
+💵 Total: ${total}
+🚚 Status Pengiriman: Selesai / Barang telah diterima  
+
+Terima kasih telah berbelanja di Tetato Chips 💚  
+Semoga produk kami bermanfaat dan sesuai harapan Anda.  
+
+Untuk informasi atau pemesanan lainnya, Anda dapat menghubungi kami kembali melalui WhatsApp / Website kami.  
+
+Salam hangat,  
+Tim Tetato Chips
+      `
+    }
+
+    const encodedMessage = encodeURIComponent(messageWhatsapp.trim())
+    window.open(`https://wa.me/62${nomor}?text=${encodedMessage}`, '_blank')
   } catch (error) {
     console.log(error)
   } finally {
@@ -91,7 +163,7 @@ const downloadInvoice = async () => {
     }
 
     const response = await axios({
-      url: `http://127.0.0.1:8000/api/invoice/${idPesanan}`,
+      url: `${BaseURL}/api/invoice/${idPesanan}`,
       method: 'POST',
       data: dataToPost,
       headers: {
@@ -101,6 +173,14 @@ const downloadInvoice = async () => {
     })
 
     pesananFetch()
+
+    const nama = pesanan.value.nama_pelanggan
+    const kode = pesanan.value.kode_pesanan
+    const nomor = pesanan.value.telepon
+    let total = formatRupiah(pesanan.value.total_harga)
+    const daftarProduk = pesanan.value.pesanan_details
+      .map((item) => `- ${item.nama_produk} (${item.jumlah}x) - ${formatRupiah(item.subtotal)}`)
+      .join('\n')
 
     const blob = new Blob([response.data], { type: 'application/pdf' })
 
@@ -118,6 +198,277 @@ const downloadInvoice = async () => {
     document.body.removeChild(fileLink)
 
     showAlert('Berhasil', 'Invoice berhasil diunduh.', 'success')
+
+    const messageWhatsapp = `Halo ${nama} 👋  
+Terima kasih sudah memesan di Tetato Chips 🙏  
+
+Berikut rincian pesanan Anda:
+${daftarProduk} 
+
+💵 Subtotal: ${total}  
+🚚 Ongkir: ${formatRupiah(ongkosKirim.value)}
+📦 Total: ${formatRupiah((pesanan.value.total_harga += ongkosKirim.value))}
+📄 Nomor Invoice: #invoice-${kode}  
+🕓 Status: Menunggu Pembayaran  
+
+Silakan melakukan pembayaran ke salah satu rekening berikut:
+
+🏦 BCA  
+No. Rekening: 1234567890 
+Atas Nama: Tetato Chips
+
+📎 Anda dapat melihat Invoice lengkap pada PDF yang kami kirim
+
+Setelah melakukan pembayaran, harap konfirmasi melalui chat ini dengan mengirim bukti transfer agar pesanan Anda segera diproses ✅  
+
+Terima kasih telah berbelanja di Tetato Chips 💚`
+
+    const encodedMessage = encodeURIComponent(messageWhatsapp.trim())
+    window.open(`https://wa.me/62${nomor}?text=${encodedMessage}`, '_blank')
+  } catch (error) {
+    console.log(error.response)
+    console.error('Gagal mengunduh invoice:', error)
+    showAlert('Gagal', 'Gagal mengunduh file. Periksa input ongkir.', 'error')
+  } finally {
+    loadingDownload.value = false
+  }
+}
+
+onMounted(() => {
+  pesananFetch()
+})
+</script> -->
+
+<script setup>
+import { computed, onMounted, ref } from 'vue'
+import { useRoute } from 'vue-router'
+import { formatRupiah } from '@/lib/FormatRupiah'
+import axios from 'axios'
+import { formatTanggalIndonesia } from '@/lib/FormatTanggal'
+import showAlert from '@/lib/Swal'
+import Cookies from 'js-cookie'
+import router from '@/router'
+import BaseURL from '@/lib/BaseUrl'
+import Swal from 'sweetalert2'
+
+const route = useRoute()
+
+const idPesanan = route.params.id
+
+const pesanan = ref(null)
+
+const daftarStatus = ['baru', 'proses', 'dikirim', 'selesai']
+const status = ref('')
+
+const ongkosKirim = ref(0) // Pindahkan ke atas
+
+// **PERBAIKAN 1: Computed property untuk Total Akhir (Subtotal + Ongkir)**
+const totalAkhir = computed(() => {
+  if (!pesanan.value) return 0
+  // pesanan.value.total_harga adalah subtotal dari produk
+  return pesanan.value.total_harga + ongkosKirim.value
+})
+
+const opsiLain = computed(() => daftarStatus.filter((s) => s !== status.value))
+const loading = ref(false)
+
+const token = Cookies.get('token')
+
+if (!token) {
+  router.push({ name: 'login' })
+}
+
+const pesananFetch = async () => {
+  try {
+    loading.value = true
+    const response = await axios.get(`${BaseURL}/api/pesanan/${idPesanan}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+
+    const data = response.data.data
+    status.value = data.status
+    pesanan.value = data
+    console.log(data)
+  } catch (error) {
+    console.log(error)
+  } finally {
+    loading.value = false
+  }
+}
+
+const loadingUpdate = ref(false)
+
+const updateStatus = async () => {
+  try {
+    loadingUpdate.value = true
+    const response = await axios.put(
+      `${BaseURL}/api/pesanan/${idPesanan}`,
+      { status: status.value },
+      { headers: { Authorization: `Bearer ${token}` } },
+    )
+
+    showAlert('Berhasil', 'Status pesanan berhasil diperbarui.', 'success')
+    pesanan.value.status = status.value
+
+    const nama = pesanan.value.nama_pelanggan
+    const kode = pesanan.value.kode_pesanan
+    const nomor = pesanan.value.telepon
+    let total = formatRupiah(pesanan.value.total_harga) 
+    const daftarProduk = pesanan.value.pesanan_details
+      .map((item) => `- ${item.nama_produk} (${item.jumlah}x) - ${formatRupiah(item.subtotal)}`)
+      .join('\n')
+    let messageWhatsapp = ''
+
+    if (status.value === 'proses') {
+      messageWhatsapp = `
+Halo ${nama} 👋
+Pembayaran untuk pesanan Anda #${kode} telah kami terima ✅
+
+Berikut rincian pesanan Anda:
+${daftarProduk}
+
+Pesanan Anda sedang diproses dan akan segera dikirim 💪
+Terima kasih telah berbelanja di Tetato Chips ❤
+`
+    } else if (status.value === 'dikirim') {
+      const { value: ekspedisi } = await Swal.fire({
+        title: 'Masukkan ekspedisi pengiriman',
+        input: 'textarea',
+        inputLabel: 'Nama ekspedisi pengirim pesanan',
+        inputPlaceholder: 'Contoh: JNE REG',
+        showCancelButton: true,
+        confirmButtonText: 'Kirim',
+      })
+      const { value: resi } = await Swal.fire({
+        title: 'Masukkan Resi pengiriman',
+        input: 'textarea',
+        inputLabel: 'Resi pengirim pesanan',
+        inputPlaceholder: 'Contoh: JNE123456789',
+        showCancelButton: true,
+        confirmButtonText: 'Kirim',
+      })
+
+      messageWhatsapp = `
+Halo ${nama}👋
+Pesanan Anda dengan nomor #${kode} telah diperbarui 🛍
+
+📦 Status terbaru: Dikirim
+Ekspedisi: ${ekspedisi}
+Nomor Resi: ${resi}
+
+Berikut daftar pesanan Anda:
+${daftarProduk}
+
+Terima kasih telah berbelanja di Tetato Chips
+      `
+    } else if (status.value === 'selesai') {
+      messageWhatsapp = `
+Halo ${nama} 👋
+
+Pesanan Anda dengan nomor #${kode} telah selesai 🎉
+
+Berikut ringkasannya:
+${daftarProduk}
+
+💵 Total: ${total} 
+🚚 Status Pengiriman: Selesai 
+
+Terima kasih telah berbelanja di Tetato Chips 💚
+Semoga produk kami bermanfaat dan sesuai harapan Anda.
+
+Untuk informasi atau pemesanan lainnya, Anda dapat menghubungi kami kembali melalui WhatsApp / Website kami.
+
+Salam hangat,
+Tim Tetato Chips
+      `
+    }
+
+    const encodedMessage = encodeURIComponent(messageWhatsapp.trim())
+    window.open(`https://wa.me/62${nomor}?text=${encodedMessage}`, '_blank')
+  } catch (error) {
+    console.log(error)
+  } finally {
+    loadingUpdate.value = false
+  }
+}
+
+const loadingDownload = ref(false)
+
+const downloadInvoice = async () => {
+  if (!pesanan.value) return
+
+  loadingDownload.value = true
+
+  try {
+    const dataToPost = {
+      ongkir: ongkosKirim.value,
+    }
+
+    const response = await axios({
+      url: `${BaseURL}/api/invoice/${idPesanan}`,
+      method: 'POST',
+      data: dataToPost,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      responseType: 'blob',
+    })
+
+    pesananFetch()
+
+    const nama = pesanan.value.nama_pelanggan
+    const kode = pesanan.value.kode_pesanan
+    const nomor = pesanan.value.telepon
+    let total = formatRupiah(pesanan.value.total_harga) 
+    const daftarProduk = pesanan.value.pesanan_details
+      .map((item) => `- ${item.nama_produk} (${item.jumlah}x) - ${formatRupiah(item.subtotal)}`)
+      .join('\n')
+
+    const blob = new Blob([response.data], { type: 'application/pdf' })
+
+    const fileName = `INVOICE-${pesanan.value.kode_pesanan || idPesanan}.pdf`
+
+    const fileURL = window.URL.createObjectURL(blob)
+
+    const fileLink = document.createElement('a')
+    fileLink.href = fileURL
+    fileLink.setAttribute('download', fileName)
+    document.body.appendChild(fileLink)
+
+    fileLink.click()
+    window.URL.revokeObjectURL(fileURL)
+    document.body.removeChild(fileLink)
+
+    showAlert('Berhasil', 'Invoice berhasil diunduh.', 'success')
+
+    const messageWhatsapp = `Halo ${nama} 👋
+Terima kasih sudah memesan di Tetato Chips 🙏
+
+Berikut rincian pesanan Anda:
+${daftarProduk}
+
+💵 Subtotal: ${total}
+🚚 Ongkir: ${formatRupiah(ongkosKirim.value)}
+📦 Total: ${formatRupiah(totalAkhir.value)} 
+📄 Nomor Invoice: #invoice-${kode}
+🕓 Status: Menunggu Pembayaran
+
+Silakan melakukan pembayaran ke salah satu rekening berikut:
+
+🏦 BCA
+No. Rekening: 1234567890
+Atas Nama: Tetato Chips
+
+📎 Anda dapat melihat Invoice lengkap pada PDF yang kami kirim
+
+Setelah melakukan pembayaran, harap konfirmasi melalui chat ini dengan mengirim bukti transfer agar pesanan Anda segera diproses ✅
+
+Terima kasih telah berbelanja di Tetato Chips 💚`
+
+    const encodedMessage = encodeURIComponent(messageWhatsapp.trim())
+    window.open(`https://wa.me/62${nomor}?text=${encodedMessage}`, '_blank')
   } catch (error) {
     console.log(error.response)
     console.error('Gagal mengunduh invoice:', error)
@@ -131,76 +482,6 @@ onMounted(() => {
   pesananFetch()
 })
 </script>
-
-<!-- <template>
-  <div v-if="loading" class="loading">
-    <p>Loading pesanan...</p>
-  </div>
-  <div v-else class="detail-pesanan">
-    <h1>Detail Pesanan</h1>
-
-    <div class="info-pesanan">
-      <p><strong>Nomor Pesanan:</strong> {{ pesanan?.id }}</p>
-      <p><strong>Tanggal:</strong> {{ formatTanggalIndonesia(pesanan?.created_at) }}</p>
-      <p><strong>Status:</strong> {{ pesanan?.status }}</p>
-      <p><strong>Total:</strong> {{ formatRupiah(pesanan?.total_harga) }}</p>
-    </div>
-
-    <table class="tabel-produk">
-      <thead>
-        <tr>
-          <th>Produk</th>
-          <th>Harga</th>
-          <th>Jumlah</th>
-          <th>Subtotal</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="item in pesanan?.pesanan_details" :key="item.id">
-          <td>{{ item.nama_produk }}</td>
-          <td>{{ formatRupiah(item.harga) }}</td>
-          <td>{{ item.jumlah }}</td>
-          <td>{{ formatRupiah(item.subtotal) }}</td>
-        </tr>
-      </tbody>
-    </table>
-
-    <div style="display: flex; flex-direction: column; margin-top: 20px">
-      <div class="input-ongkir-container" style="margin-bottom: 20px">
-        <label for="ongkir" style="font-weight: bold; margin-bottom: 5px; display: block"
-          >Masukkan Ongkos Kirim (Rp):</label
-        >
-        <input
-          type="number"
-          id="ongkir"
-          v-model.number="ongkosKirim"
-          style="padding: 8px; border-radius: 4px; border: 1px solid #ccc; width: 220px"
-        />
-      </div>
-      <select class="status-dropdown" v-model="status">
-        <option :value="status">{{ status }}</option>
-        <option v-for="status in opsiLain" :key="status" :value="status">
-          {{ status }}
-        </option>
-      </select>
-
-      <div class="container-button" style="display: flex; gap: 1rem">
-        <button @click="updateStatus" class="btn-kembali">
-          <span v-if="loadingUpdate">Memperbarui data</span><span v-else>Simpan</span>
-        </button>
-        <button
-          @click="downloadInvoice"
-          class="btn-download"
-          :disabled="loadingDownload"
-          style="width: 220px"
-        >
-          <span v-if="loadingDownload">Membuat PDF...</span><span v-else>Cetak Invoice (PDF)</span>
-        </button>
-      </div>
-    </div>
-  </div>
-</template> -->
-
 <template>
   <div v-if="loading" class="loading">
     <p>Loading pesanan...</p>
@@ -209,8 +490,10 @@ onMounted(() => {
     <h1>Detail Pesanan</h1>
 
     <div class="info-pesanan">
-      <p><strong>Nomor Pesanan:</strong> {{ pesanan?.id }}</p>
+      <p><strong>Nama :</strong> {{ pesanan?.nama_pelanggan }}</p>
+      <p><strong>Kode Pesanan:</strong> {{ pesanan?.kode_pesanan }}</p>
       <p><strong>Tanggal:</strong> {{ formatTanggalIndonesia(pesanan?.created_at) }}</p>
+      <p><strong>Nomor:</strong> 0{{ pesanan?.telepon }}</p>
       <p><strong>Status:</strong> {{ pesanan?.status }}</p>
       <p><strong>Total:</strong> {{ formatRupiah(pesanan?.total_harga) }}</p>
     </div>
@@ -239,7 +522,7 @@ onMounted(() => {
         <h3>Perbarui Status</h3>
         <div class="input-group">
           <label for="status-select">Pilih Status Baru:</label>
-          <select  class="form-input" v-model="status">
+          <select class="form-input" v-model="status">
             <option :value="status">{{ status }}</option>
             <option v-for="status in opsiLain" :key="status" :value="status">
               {{ status }}
@@ -264,7 +547,8 @@ onMounted(() => {
           />
         </div>
         <button @click="downloadInvoice" class="btn btn-download" :disabled="loadingDownload">
-          <span v-if="loadingDownload">Membuat PDF...</span><span v-else>Cetak Invoice PDF</span>
+          <span v-if="loadingDownload">Membuat PDF...</span
+          ><span v-else>Konfirmasi Pembayaran & Cetak Invoice PDF</span>
         </button>
         <small class="hint-text">*Masukkan ongkos kirim sebelum mencetak invoice.</small>
       </div>

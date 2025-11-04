@@ -6,6 +6,7 @@ import { ref, onMounted, watch } from 'vue'
 import debounce from 'lodash.debounce'
 import Cookies from 'js-cookie'
 import router from '@/router'
+import BaseURL from '@/lib/BaseUrl'
 
 const search = ref('')
 const date = ref('')
@@ -26,7 +27,7 @@ if(!token){
 const fetchPesanans = async (page = 1) => {
   try {
     loading.value = true
-    const url = `http://127.0.0.1:8000/api/pesanan?page=${page}&status=${statusRef.value}&search=${search.value}&date=${date.value}`
+    const url = `${BaseURL}/api/pesanan?page=${page}&status=${statusRef.value}&search=${search.value}&date=${date.value}`
 
     console.log('Fetching:', url)
 
@@ -95,6 +96,9 @@ onMounted(() => {
       <button :class="{ active: statusRef === 'proses' }" @click="statusRef = 'proses'">
         Proses
       </button>
+      <button :class="{ active: statusRef === 'dikirim' }" @click="statusRef = 'dikirim'">
+        Dikirim
+      </button>
       <button :class="{ active: statusRef === 'selesai' }" @click="statusRef = 'selesai'">
         Selesai
       </button>
@@ -110,6 +114,7 @@ onMounted(() => {
         <tr>
           <th>ID</th>
           <th>Customer</th>
+          <th>Telepon</th>
           <th>Tanggal</th>
           <th>Total</th>
           <th>Status</th>
@@ -132,6 +137,7 @@ onMounted(() => {
         <tr v-else v-for="pesanan in dataPesanans" :key="pesanan.id">
           <td>#{{ pesanan.kode_pesanan }}</td>
           <td>{{ pesanan.nama_pelanggan }}</td>
+          <td>{{ pesanan.telepon }}</td>
           <td>{{ formatTanggalIndonesia(pesanan.created_at) }}</td>
           <td>{{ formatRupiah(pesanan.total_harga) }}</td>
           <td>
