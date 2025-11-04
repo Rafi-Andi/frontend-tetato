@@ -198,33 +198,21 @@ header h2 {
   .main {
     flex-direction: column;
     text-align: center;
-    padding: 40px;
+    padding: 80px;
+    margin-top: 100px;
   }
 
-  .right-container {
-    order: -1;
-    margin-bottom: 30px;
-  }
-
-  .left-container {
-    align-items: center;
-  }
-
-  .button-container {
-    justify-content: center;
-    width: 100%;
-    margin-top: -30px;
-  }
-
-  .label-container {
-    justify-content: center;
+  .right-container img {
+    display: none ;
   }
 }
 
 @media (max-width: 600px) {
+  
   .main {
     padding: 20px;
     gap: 30px;
+
   }
   header {
     padding: 20px;
@@ -246,8 +234,8 @@ header h2 {
   }
 
   .label-item {
-    width: 100%;
-    justify-content: flex-start;
+    width: 60%;
+    display: flex;
   }
 }
 </style>

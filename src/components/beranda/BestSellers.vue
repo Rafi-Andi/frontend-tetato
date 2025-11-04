@@ -186,12 +186,11 @@ Button {
   padding-left: 40px;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1024px) {
   .container-card {
     display: flex;
-    flex-direction: column;
-    justify-content: center;
     align-items: center;
+    flex-direction: column;
     gap: 1rem;
     padding: 100px 0;
   }

@@ -7,8 +7,6 @@ import Main from '@/components/tentangKami/main.vue';
 </script>
 
 <template>
-    <!-- ngoding html e ng kene -->
-
     <Main />
     <Cerita />
     <Komitmen />

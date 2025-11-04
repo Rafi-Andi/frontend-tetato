@@ -1,4 +1,6 @@
-<script setup></script>
+<script setup>
+
+</script>
 
 <template>
     <!-- ngoding html e ng kene -->
@@ -108,23 +110,65 @@ main {
 }
 
 @media (max-width: 1024px) {
-    .cta-container {
+    .cta-section {
+        /* KUNCI: Mengubah layout dari baris menjadi kolom */
         flex-direction: column;
         text-align: center;
-        padding: 50px;
+        gap: 30px; 
+        padding: 40px 20px;
+        max-width: 800px; /* Lebar container lebih kecil */
+        margin: 30px auto; /* Pusat container */
     }
 
+    .cta-image {
+        /* Menghilangkan properti geser desktop agar gambar di tengah */
+        transform: none; 
+        left: auto; 
+    }
+    
     .cta-image img {
-        width: 280px;
+        width: 300px;
     }
 
+    .cta-content {
+        max-width: 90%;
+    }
     .cta-content h2 {
-        font-size: 32px;
+        font-size: 38px;
     }
 
     .cta-content p {
-        font-size: 16px;
+        font-size: 18px;
     }
 }
 
+/* ======================================= */
+/* MEDIA QUERY: LAYAR MOBILE (MAX 600PX) */
+/* ======================================= */
+@media (max-width: 600px) {
+    .cta-section {
+        /* Layout sudah bertumpuk dari 1024px, tinggal penyesuaian padding */
+        padding: 20px;
+        border-radius: 25px;
+        margin: 15px; /* Margin lebih kecil */
+    }
+    
+    .cta-image img {
+        width: 250px; /* Gambar lebih kecil untuk ponsel */
+    }
+
+    .cta-content h2 {
+        font-size: 28px;
+    }
+
+    .cta-content p {
+        font-size: 14px;
+        padding: 0 5px; 
+    }
+
+    .cta-button {
+        padding: 10px 20px;
+        font-size: 15px;
+    }
+}
 </style>
