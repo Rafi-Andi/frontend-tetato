@@ -253,11 +253,15 @@ body {
 }
 
 .status.baru {
-  background-color: #e2b810;
+  background-color: #3b82f6;
 }
 
 .status.proses {
-  background-color: #3b82f6;
+  background-color: #FBBF24;
+}
+
+.status.dikirim {
+  background-color: #FB923C;
 }
 
 .status.selesai {

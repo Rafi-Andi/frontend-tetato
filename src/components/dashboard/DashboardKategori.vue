@@ -21,30 +21,33 @@ const categories = ref(null)
 const totalPages = ref(0)
 const currentPage = ref(1)
 const isLoading = ref(false)
+const isLoadingPostForm = ref(false)
+const errors = ref(null)
 
 const fetchKategori = async (page = 1) => {
-    try {
-        isLoading.value = true
-        const response = await axios.get(`http://127.0.0.1:8000/api/kategori?page=${page}`)
-        console.log('data :', response.data)
-        const data = response.data.data
-        categories.value = data.data
-        
-        currentPage.value = data.current_page
-        
-        totalPages.value = data.last_page
-        
-    } catch (error) {
-        console.log(error)
-    }finally{
-        isLoading.value = false
-    }
+  try {
+    isLoading.value = true
+    const response = await axios.get(`http://127.0.0.1:8000/api/kategori?page=${page}`)
+    console.log('data :', response.data)
+    const data = response.data.data
+    categories.value = data.data
+
+    currentPage.value = data.current_page
+
+    totalPages.value = data.last_page
+  } catch (error) {
+    console.log(error)
+  } finally {
+    isLoading.value = false
+  }
 }
 
 const editId = ref(0)
 
 const tambahProduk = async () => {
   try {
+    isLoadingPostForm.value = true
+    errors.value = {}
     if (editId.value) {
       console.log('ini edit')
 
@@ -62,6 +65,7 @@ const tambahProduk = async () => {
       console.log(response.data)
       kategoriBaru.value.nama_kategori = ''
       editId.value = null
+      fetchKategori(currentPage.value)
     } else {
       const response = await axios.post('http://127.0.0.1:8000/api/kategori', kategoriBaru.value, {
         headers: {
@@ -69,26 +73,33 @@ const tambahProduk = async () => {
         },
       })
 
-      showAlert(response.data.message, 'Produk Berhasil ditambahkan ke daftar produk', 'success')
+      showAlert(
+        response.data.message,
+        'Kategori Berhasil ditambahkan ke daftar kategori',
+        'success',
+      )
       console.log(response.data)
 
       kategoriBaru.value.nama_produk = ''
       editId.value = null
+      fetchKategori(currentPage.value)
     }
   } catch (error) {
     console.log('Error upload:', error)
+    errors.value = error.response.data.errors
     showAlert(
       'Gagal menambahkan kategori',
       error.response?.data?.message || 'Terjadi kesalahan',
       'error',
-    )  
+    )
     const message = error
     if (message === 'Authenticated.') {
       router.push({ name: 'login' })
     }
+  } finally {
+    isLoadingPostForm.value = false
   }
 }
-
 
 const buttonEdit = (id, nama_kategori) => {
   editId.value = id
@@ -107,10 +118,10 @@ onMounted(() => {
 
 <template>
   <div class="data-produk">
-    <h1>Data Produk</h1>
+    <h1>Data Kategori</h1>
 
     <div class="form-produk">
-      <h2>Tambah Produk</h2>
+      <h2>Tambah Kategori</h2>
       <div class="form-container">
         <div class="form-inputs">
           <div class="input-group">
@@ -119,7 +130,11 @@ onMounted(() => {
               type="text"
               v-model="kategoriBaru.nama_kategori"
               placeholder="Kemasan 1000 Gram"
+              required
             />
+            <p v-if="errors?.nama_kategori?.[0]" style="color: red; margin-top: 5px; font-size: 15px">
+              {{ errors?.nama_kategori[0] }}
+            </p>
           </div>
         </div>
       </div>
@@ -128,7 +143,8 @@ onMounted(() => {
         Batalkan Edit
       </button>
       <button class="btn-tambah" @click="tambahProduk">
-        <span v-if="editId">Edit Produk</span> <span v-else>Tambah Produk</span>
+        <span v-if="isLoadingPostForm">Loading..</span>
+        <span v-else-if="editId">Edit Kategori</span> <span v-else>Tambah Kategori</span>
       </button>
     </div>
 
@@ -142,29 +158,18 @@ onMounted(() => {
           </tr>
         </thead>
         <tbody v-if="categories?.length > 0">
-          <tr
-            v-for="(category, index) in categories"
-            :key="index"
-          >
+          <tr v-for="(category, index) in categories" :key="index">
             <td>{{ category.id }}</td>
             <td>{{ category.nama_kategori }}</td>
             <td class="action">
-              <button
-                class="edit-btn"
-                @click="
-                  buttonEdit(
-                    category.id,
-                    category.nama_kategori
-                  )
-                "
-              >
+              <button class="edit-btn" @click="buttonEdit(category.id, category.nama_kategori)">
                 <Icon icon="lucide:edit" width="20" height="20" />
               </button>
             </td>
           </tr>
         </tbody>
-        <h1 style="text-align: center; margin-top: 10px;" v-else-if="isLoading">Memuat Data..</h1>
-        <h1 style="text-align: center; margin-top: 10px;" v-else>Tidak ada data produk</h1>
+        <h1 style="text-align: center; margin-top: 10px" v-else-if="isLoading">Memuat Data..</h1>
+        <h1 style="text-align: center; margin-top: 10px" v-else>Tidak ada data produk</h1>
       </table>
       <div class="container-paginate" v-if="categories?.length > 0">
         <button

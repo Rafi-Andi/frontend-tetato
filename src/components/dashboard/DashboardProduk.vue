@@ -22,7 +22,8 @@ const token = Cookies.get('token')
 if (!token) {
   router.push({ name: 'login' })
 }
-const daftarProduk = ref([])
+
+const errors = ref(null)
 
 const produks = ref(null)
 const totalPages = ref(0)
@@ -39,9 +40,13 @@ const fetchProduks = async (page = 1) => {
   totalPages.value = data.last_page
 }
 
+const isLoadingForm = ref(false)
+
 const tambahProduk = async () => {
   try {
+    isLoadingForm.value = true
     if (editId.value) {
+      errors.value = {}
       console.log('ini edit')
       const formData = new FormData()
       formData.append('_method', 'PUT')
@@ -52,16 +57,12 @@ const tambahProduk = async () => {
       if (produkBaru.value.file_path) {
         formData.append('file_path', produkBaru.value.file_path)
       }
-      const response = await axios.post(
-        `${BaseURL}/api/produk/${editId.value}`,
-        formData,
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-            Authorization: `Bearer ${token}`,
-          },
+      const response = await axios.post(`${BaseURL}/api/produk/${editId.value}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`,
         },
-      )
+      })
 
       showAlert(response.data.message, 'Produk Berhasil di Edit', 'success')
       console.log(response.data)
@@ -73,7 +74,9 @@ const tambahProduk = async () => {
       produkBaru.value.preview = ''
       editId.value = null
       fetchProduks(currentPage.value)
-    } else {  
+    } else {
+      errors.value = {}
+
       const formData = new FormData()
       formData.append('kategori_id', produkBaru.value.kategori_id)
       formData.append('nama_produk', produkBaru.value.nama_produk)
@@ -84,7 +87,7 @@ const tambahProduk = async () => {
       const response = await axios.post(`${BaseURL}/api/produk`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
-          Authorization: 'Bearer 1|0sZqeLnK0txIokujN6sTMVGgCwLaAzKVooYvNjuu087acf03',
+          Authorization: `Bearer ${token}`,
         },
       })
 
@@ -103,6 +106,8 @@ const tambahProduk = async () => {
     }
   } catch (error) {
     console.log('Error upload:', error.response)
+    console.log(error.response.data.errors)
+    errors.value = error.response.data.errors
     showAlert(
       'Gagal menambahkan produk',
       error.response?.data?.message || 'Terjadi kesalahan',
@@ -112,6 +117,8 @@ const tambahProduk = async () => {
     if (message === 'Authenticated.') {
       router.push({ name: 'login' })
     }
+  } finally {
+    isLoadingForm.value = false
   }
 }
 
@@ -143,7 +150,7 @@ const hapusProduk = async (id) => {
     const response = await axios.delete(`${BaseURL}/api/produk/${id}`, {
       headers: {
         'Content-Type': 'multipart/form-data',
-        Authorization: 'Bearer 1|0sZqeLnK0txIokujN6sTMVGgCwLaAzKVooYvNjuu087acf03',
+        Authorization: `Bearer ${token}`,
       },
     })
 
@@ -201,6 +208,9 @@ onMounted(() => {
               v-model="produkBaru.nama_produk"
               placeholder="Tetato chips sambalado"
             />
+            <p v-if="errors?.nama_produk?.[0]" style="color: red; margin-top: 5px; font-size: 15px">
+              {{ errors?.nama_produk[0] }}
+            </p>
           </div>
           <div class="input-group">
             <label>Deskripsi</label>
@@ -209,10 +219,16 @@ onMounted(() => {
               v-model="produkBaru.deskripsi"
               placeholder="Tetato chips rasa yang enak dan gurih"
             />
+            <p v-if="errors?.deskripsi?.[0]" style="color: red; margin-top: 5px; font-size: 15px">
+              {{ errors?.deskripsi[0] }}
+            </p>
           </div>
           <div class="input-group">
             <label>Harga</label>
             <input type="number" v-model="produkBaru.harga" placeholder="15000" />
+            <p v-if="errors?.harga?.[0]" style="color: red; margin-top: 5px; font-size: 15px">
+              {{ errors?.harga[0] }}
+            </p>
           </div>
           <div class="input-group">
             <label>Kategori</label>
@@ -227,6 +243,9 @@ onMounted(() => {
                 {{ kategori.nama_kategori }}
               </option>
             </select>
+            <p v-if="errors?.kategori_id?.[0]" style="color: red; margin-top: 5px; font-size: 15px">
+              {{ errors?.kategori_id[0] }}
+            </p>
           </div>
         </div>
 
@@ -246,6 +265,9 @@ onMounted(() => {
 
             <input type="file" accept="image/*" class="browse-btn" @change="handleFileChange" />
           </div>
+          <p v-if="errors?.file_path?.[0]" style="color: red; margin-top: 20px; font-size: 15px">
+            {{ errors?.file_path[0] }}
+          </p>
         </div>
       </div>
 
@@ -253,7 +275,8 @@ onMounted(() => {
         Batalkan Edit
       </button>
       <button class="btn-tambah" @click="tambahProduk">
-        <span v-if="editId">Edit Produk</span> <span v-else>Tambah Produk</span>
+        <span v-if="isLoadingForm">Loading..</span>
+        <span v-else-if="editId">Edit Kategori</span> <span v-else>Tambah Kategori</span>
       </button>
     </div>
 

@@ -24,7 +24,7 @@ defineProps({
 </script>
 
 <template>
-  <div class="card">
+  <router-link :to="{ name: 'produk-detail', params: { slug } }" class="card">
     <div class="container-img">
       <img :src="img" alt="Tetato Chips" loading="lazy" decoding="async" />
     </div>
@@ -33,7 +33,7 @@ defineProps({
       <h4>{{ title }}</h4>
       <div class="harga">
         <h2>{{ formatRupiah(harga) }}</h2>
-        <router-link :to="{ name: 'produk-detail', params: { slug } }" class="button-detail">
+        <div class="button-detail">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="14"
@@ -47,10 +47,12 @@ defineProps({
           >
             <polyline points="9 18 15 12 9 6"></polyline>
           </svg>
-        </router-link>
+        </div>
       </div>
     </div>
-  </div>
+    <!-- <div class="card">
+    </div> -->
+  </router-link>
 </template>
 
 <style scoped>
@@ -68,6 +70,7 @@ defineProps({
   overflow: visible;
   cursor: pointer;
   border: 1px solid rgba(0, 0, 0, 0.04);
+  text-decoration: none;
 }
 
 .container-img {
