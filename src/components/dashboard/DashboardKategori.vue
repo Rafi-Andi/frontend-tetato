@@ -6,6 +6,7 @@ import { formatRupiah } from '@/lib/FormatRupiah'
 import showAlert from '@/lib/Swal'
 import Cookies from 'js-cookie'
 import router from '@/router'
+import showConfirm from '@/lib/SwalConfirm'
 
 const kategoriBaru = ref({
   nama_kategori: '',
@@ -101,6 +102,38 @@ const tambahProduk = async () => {
   }
 }
 
+const buttonDelete = async (id, nama_kategori) => {
+  const result = await showConfirm(
+    `Hapus Kategori ${nama_kategori}?`,
+    'Anda yakin ingin menghapus kategori ini? Aksi ini tidak dapat dibatalkan.',
+    'warning', 
+    'Ya, Hapus!',
+  )
+
+
+  if (result && result.isConfirmed) {
+    try {
+      const response = await axios.delete(`http://127.0.0.1:8000/api/kategori/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      
+      showAlert(response.data.message, `Kategori ${nama_kategori} Berhasil dihapus`, 'success')
+      fetchKategori(currentPage.value)
+    } catch (error) {
+      console.error('Error delete:', error.response || error)
+      const errorMessage = error.response?.data?.error || 'Terjadi kesalahan saat menghapus.'
+      
+      showAlert(
+        'Gagal Menghapus Kategori',
+        errorMessage,
+        'error',
+      )
+    }
+  }
+}
+
 const buttonEdit = (id, nama_kategori) => {
   editId.value = id
   kategoriBaru.value.nama_kategori = nama_kategori
@@ -132,7 +165,10 @@ onMounted(() => {
               placeholder="Kemasan 1000 Gram"
               required
             />
-            <p v-if="errors?.nama_kategori?.[0]" style="color: red; margin-top: 5px; font-size: 15px">
+            <p
+              v-if="errors?.nama_kategori?.[0]"
+              style="color: red; margin-top: 5px; font-size: 15px"
+            >
               {{ errors?.nama_kategori[0] }}
             </p>
           </div>
@@ -165,17 +201,18 @@ onMounted(() => {
               <button class="edit-btn" @click="buttonEdit(category.id, category.nama_kategori)">
                 <Icon icon="lucide:edit" width="20" height="20" />
               </button>
+              <button class="delete-btn" @click="buttonDelete(category.id, category.nama_kategori)">
+                <Icon icon="lucide:trash-2" width="20" height="20" style="color: red" />
+              </button>
             </td>
           </tr>
         </tbody>
-        <h1 style="text-align: center; margin-top: 10px" v-else-if="isLoading">Memuat Data..</h1>
-        <h1 style="text-align: center; margin-top: 10px" v-else>Tidak ada data produk</h1>
       </table>
-      <div class="container-paginate" v-if="categories?.length > 0">
+      <div class="container-paginate" v-if="categories?.length > 0 && totalPages > 1">
         <button
           :disabled="currentPage === 1"
           class="page button"
-          @click="fetchKategori(currentPage - 1, kategoriAktif)"
+          @click="fetchKategori(currentPage - 1)"
         >
           <p><</p>
         </button>
@@ -184,7 +221,7 @@ onMounted(() => {
           v-for="i in totalPages"
           :key="i"
           :class="['page', i === currentPage ? 'active' : 'inactive']"
-          @click="fetchKategori(i, kategoriAktif)"
+          @click="fetchKategori(i)"
         >
           <p>{{ i }}</p>
         </div>
@@ -192,7 +229,7 @@ onMounted(() => {
         <button
           :disabled="currentPage === totalPages"
           class="page button"
-          @click="fetchKategori(currentPage + 1, kategoriAktif)"
+          @click="fetchKategori(currentPage + 1)"
         >
           <p>></p>
         </button>

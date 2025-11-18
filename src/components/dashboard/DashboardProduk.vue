@@ -63,7 +63,7 @@ const tambahProduk = async () => {
           Authorization: `Bearer ${token}`,
         },
       })
-
+      
       showAlert(response.data.message, 'Produk Berhasil di Edit', 'success')
       console.log(response.data)
       produkBaru.value.nama_produk = ''
