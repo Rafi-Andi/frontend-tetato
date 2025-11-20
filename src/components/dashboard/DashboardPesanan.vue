@@ -89,7 +89,7 @@ onMounted(() => {
 
 <template>
   <div class="container">
-    <h2 class="title">Data Produk</h2>
+    <h2 class="title">Data Pesanan</h2>
 
     <div class="tabs">
       <button :class="{ active: statusRef === '' }" @click="statusRef = ''">All Orders</button>
