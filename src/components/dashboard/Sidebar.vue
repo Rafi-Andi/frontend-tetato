@@ -3,6 +3,7 @@ import { Icon } from '@iconify/vue'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import router from '@/router'
+import BaseURL from '@/lib/BaseUrl'
 const props = defineProps({
   isOpen: {
     type: Boolean,
@@ -15,7 +16,7 @@ const token = Cookies.get('token')
 const logout = async () => {
   try {
     await axios.post(
-      'http://localhost:8000/api/logout',
+      `${BaseURL}/api/logout`,
       {},
       {
         headers: {

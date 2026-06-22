@@ -7,6 +7,7 @@ import showAlert from '@/lib/Swal'
 import Cookies from 'js-cookie'
 import router from '@/router'
 import showConfirm from '@/lib/SwalConfirm'
+import BaseURL from '@/lib/BaseUrl'
 
 const kategoriBaru = ref({
   nama_kategori: '',
@@ -28,7 +29,7 @@ const errors = ref(null)
 const fetchKategori = async (page = 1) => {
   try {
     isLoading.value = true
-    const response = await axios.get(`http://127.0.0.1:8000/api/kategori?page=${page}`)
+    const response = await axios.get(`${BaseURL}/api/kategori?page=${page}`)
     console.log('data :', response.data)
     const data = response.data.data
     categories.value = data.data
@@ -53,7 +54,7 @@ const tambahProduk = async () => {
       console.log('ini edit')
 
       const response = await axios.post(
-        `http://127.0.0.1:8000/api/kategori/${editId.value}`,
+        `${BaseURL}/api/kategori/${editId.value}`,
         kategoriBaru.value,
         {
           headers: {
@@ -68,7 +69,7 @@ const tambahProduk = async () => {
       editId.value = null
       fetchKategori(currentPage.value)
     } else {
-      const response = await axios.post('http://127.0.0.1:8000/api/kategori', kategoriBaru.value, {
+      const response = await axios.post(`${BaseURL}/api/kategori`, kategoriBaru.value, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -113,7 +114,7 @@ const buttonDelete = async (id, nama_kategori) => {
 
   if (result && result.isConfirmed) {
     try {
-      const response = await axios.delete(`http://127.0.0.1:8000/api/kategori/${id}`, {
+      const response = await axios.delete(`${BaseURL}/api/kategori/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

@@ -6,6 +6,7 @@ import showAlert from '@/lib/Swal'
 import { useKeranjangStore } from '@/stores/Keranjang'
 import { useProdukStore } from '@/stores/Produk'
 import axios from 'axios'
+import BaseURL from '@/lib/BaseUrl'
 import { computed, onBeforeMount, onMounted, reactive, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
@@ -20,7 +21,7 @@ const totalHarga = computed(() => data?.value?.harga * kuantitas.value)
 
 const fetchDetailProduks = async () => {
   try {
-    const response = await axios.get(`http://127.0.0.1:8000/api/produk/${slug}`)
+    const response = await axios.get(`${BaseURL}/api/produk/${slug}`)
     console.log(response)
     data.value = response.data.data[0]
     console.log(data.value.nama_produk)
